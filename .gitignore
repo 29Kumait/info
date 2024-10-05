@@ -2,4 +2,15 @@ node_modules
 
 /.cache
 /build
+
 .env
+.env.local
+
+.DS_Store
+
+.idea
+.vscode
+
+README.md
+NOTES.md
+
