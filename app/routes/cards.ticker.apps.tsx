@@ -17,7 +17,9 @@ export async function loader() {
 
     const data = await db.collection("app").findOne({});
 
-    if (!data) throw new Error("No data found");
+    if (!data) {
+        return new Response("No data found", { status: 404 });
+    }
 
     return json({ apps: data.apps });
 }
@@ -29,15 +31,15 @@ export default function AppData() {
         <div>
             <h1 className="prose-2xl m-12"> Projects Deployment </h1>
             <div className="max-w-5xl mx-auto p-8 rounded-xl shadow-lg justify-evenly bg-gray-900/60 m-3">
-                { apps.map ((app) => (
-                    <div key={ app.id }>
+                {apps.map((app) => (
+                    <div key={app.id}>
                         <p>
-                            <a href={ app.deployment }>{ app.title }</a>
+                            <a href={app.deployment}>{app.title}</a>
                         </p>
                         <div className="relative w-full h-0 pb-[56.25%] overflow-hidden rounded-lg bg-gray-800">
                             <iframe
-                                src={ app.deployment }
-                                title={ app.deployment }
+                                src={app.deployment}
+                                title={app.deployment}
                                 className="absolute top-0 left-0 w-full h-full rounded-lg"
                                 allow="autoplay; fullscreen"
                                 allowFullScreen
@@ -45,7 +47,7 @@ export default function AppData() {
                             />
                         </div>
                     </div>
-                )) }
+                ))}
             </div>
         </div>
     );
