@@ -1,0 +1,17 @@
+export const CARDS = [
+    {id: 1, icon: "/code.svg"},
+    {id: 13, icon: "/html.svg"},
+    {id: 15, icon: "/css.svg"},
+    {id: 2, icon: "/ts.svg"},
+    {id: 3, icon: "/js.svg"},
+    {id: 4, icon: "/gh.svg"},
+    {id: 5, icon: "/react.svg"},
+    {id: 14, icon: "/node.svg"},
+    {id: 6, icon: "/express.svg"},
+    {id: 7, icon: "/api.svg"},
+    {id: 8, icon: "/db.svg"},
+    {id: 9, icon: "/json.svg"},
+    {id: 10, icon: "/webstorm.svg"},
+    {id: 11, icon: "/npm.svg"},
+    {id: 12, icon: "/docker.svg"},
+];
