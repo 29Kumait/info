@@ -5,8 +5,6 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 
-
-
 export default defineConfig({
   plugins: [
     mdx({
@@ -21,8 +19,12 @@ export default defineConfig({
         v3_relativeSplatPath: true,
         v3_throwAbortReason: true,
       },
-
     }),
     tsconfigPaths(),
   ],
+  build: {
+    rollupOptions: {
+      external: ['mongodb'],
+    },
+  },
 });
