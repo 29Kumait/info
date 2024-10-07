@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 html,
 body {
   @apply bg-white dark:bg-gray-950;
@@ -9,4 +10,72 @@ body {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+}
+
+.transition-opacity {
+  transition-property: opacity;
+}
+
+.bg-black {
+  background-color: #181818;
+}
+
+
+.img-frame {
+  @apply border-4 border-indigo-100 shadow-lg rounded-md overflow-hidden flex items-center justify-center;
+}
+
+.custom-highlight {
+  background-color: rgba(118, 166, 183, 0.5);
+  color: #e2e8f0;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+
+.shadow-glow {
+  box-shadow: 0 4px 15px rgba(252, 252, 252, 0.66), 0 0 30px rgba(252, 252, 252, 0.49);
+}
+
+.hover-glow {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  @apply transform translate-y-0;
+}
+
+.hover-glow:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.hover\:animation-pause:hover {
+  animation-play-state: paused;
+}
+
+.hover\:text-bright:hover {
+  color: #b2dcd4d6;
+}
+
+/* Float animation */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.icon-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-marquee {
+  @apply inline-flex whitespace-nowrap;
 }
