@@ -1,4 +1,3 @@
-// routes/Slide.tsx
 import { LoaderFunction, json } from "@remix-run/node";
 import { useLoaderData, Link, useSearchParams, Outlet } from "@remix-run/react";
 import ErrorBoundary from "./errorBoundary";
@@ -48,7 +47,7 @@ const getVisibleCards = (cards: Card[], pageIndex: number): Card[] => {
     );
 };
 
-export default function Cards() {
+export default function PhotosCards() {
     const { cards } = useLoaderData<{ cards: Card[] }>();
     const [searchParams] = useSearchParams();
     const currentPageIndex = parseInt(searchParams.get("page") || "0", 10);
@@ -58,12 +57,12 @@ export default function Cards() {
 
     return (
         <div
-            className="p-8 text-gray-900 w-full bg-cover bg-center"
+            className="p-8 text-gray-900 w-full bg-cover bg-center mt-36"
             style={{
                 backgroundImage: "url('/bg.jpg')",
             }}
         >
-            <div className="text-center text-7xl  mb-6">Kumait</div>
+            <div className="text-center text-7xl  mb-36 mt-8">Kumait</div>
             <div className="flex justify-center items-center mb-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {visibleCards.length > 0 ? (
