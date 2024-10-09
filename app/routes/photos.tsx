@@ -4,7 +4,6 @@ import type { LoaderFunction, ActionFunction } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import ImageKit from "imagekit";
 import { getSession, commitSession } from "~/sessions.server";
-import React from "react";
 
 interface Image {
     fileId: string;
