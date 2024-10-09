@@ -4,7 +4,7 @@ import type { LoaderFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Flash Back" },
+    { title: "info" },
     { name: "description", content: "portfolio page" },
   ];
 };

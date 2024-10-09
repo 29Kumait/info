@@ -88,8 +88,8 @@ export default function PhotosCards() {
 
             {/* Pagination Controls */}
             <div className="flex justify-center items-center mt-8">
-                <Link
-                    to={`?page=${currentPageIndex > 0 ? currentPageIndex - 1 : maxPageIndex}`}
+                <Link preventScrollReset={true}
+                      to={`?page=${currentPageIndex > 0 ? currentPageIndex - 1 : maxPageIndex}`}
                     className={`mx-2 border border-gray-900 rounded-full ${currentPageIndex === 0
                         ? "text-gray-400 cursor-not-allowed"
                         : "text-blue-600 hover:bg-blue-600"
@@ -100,8 +100,8 @@ export default function PhotosCards() {
                 <span className="mx-4">
                     {currentPageIndex + 1} of {maxPageIndex + 1}
                 </span>
-                <Link
-                    to={`?page=${currentPageIndex < maxPageIndex ? currentPageIndex + 1 : 0}`}
+                <Link preventScrollReset={true}
+                      to={`?page=${currentPageIndex < maxPageIndex ? currentPageIndex + 1 : 0}`}
                     className={`mx-2 border border-gray-900 rounded-full ${currentPageIndex === maxPageIndex
                         ? "text-gray-400 cursor-not-allowed"
                         : "text-blue-600 hover:bg-blue-600"

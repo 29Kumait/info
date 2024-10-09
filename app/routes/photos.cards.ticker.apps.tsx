@@ -28,7 +28,7 @@ export default function AppData() {
 
     return (
         <div>
-            <h1 className="prose-2xl m-12"> Projects Deployment </h1>
+            <h1 className="prose-2xl m-12"> Projects Deployments </h1>
             <div className="max-w-5xl mx-auto p-8 rounded-xl shadow-lg justify-evenly bg-gray-900/60 m-3">
                 {apps.length > 0 ? (
                     apps.map((app) => (
