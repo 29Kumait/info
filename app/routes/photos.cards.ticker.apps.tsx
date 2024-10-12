@@ -32,14 +32,21 @@ export default function AppData() {
             <div className="max-w-5xl mx-auto p-8 rounded-xl shadow-lg justify-evenly bg-gray-900/60 m-3">
                 {apps.length > 0 ? (
                     apps.map((app) => (
-                        <div key={app.id}>
-                            <h2 className="prose m-6 ">
-                                <a href={app.deployment}>{app.title}</a>
+                        <div key={ app.id }>
+                            <h2 className="prose m-6 text-2xl p-6 transition-transform hover:drop-shadow-blue-glow">
+                                <a
+                                    className="prose font-bold p-4 border-2 border-[#FF507A] rounded-lg text-[#BEE0DB] hover:bg-[#FF507A] hover:text-white no-underline transition-all"
+                                    href={ app.deployment }
+                                >
+                                    { app.title }
+                                </a>
                             </h2>
+
+
                             <div className="relative w-full h-0 pb-[56.25%] overflow-hidden rounded-lg bg-gray-800">
                                 <iframe
-                                    src={app.deployment}
-                                    title={app.deployment}
+                                    src={ app.deployment }
+                                    title={ app.deployment }
                                     className="absolute top-0 left-0 w-full h-full rounded-lg"
                                     allow="autoplay; fullscreen"
                                     allowFullScreen
@@ -49,8 +56,8 @@ export default function AppData() {
                         </div>
                     ))
                 ) : (
-                    <p>No projects found</p>
-                )}
+                    <div>No projects found</div>
+                ) }
             </div>
         </div>
     );
