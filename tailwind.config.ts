@@ -34,6 +34,10 @@ export default {
             boxShadow: {
                 'custom-ring': '0 0 10px rgba(0, 0, 255, 0.5)',
             },
+            dropShadow: {
+                'bright-glow': '0 0 4em rgba(255, 255, 255, 0.9)',
+                'blue-glow': '0 0 4em rgba(0, 123, 255, 0.9)',
+            },
             colors: {
                 "dark-blue-black-01": "rgba(4, 9, 20, 0.9)",
                 "dark-blue-black-02": "rgba(12, 27, 52, 0.8)",
