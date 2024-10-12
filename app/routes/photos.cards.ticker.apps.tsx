@@ -33,9 +33,9 @@ export default function AppData() {
                 {apps.length > 0 ? (
                     apps.map((app) => (
                         <div key={app.id}>
-                            <p>
+                            <h2 className="prose m-6 ">
                                 <a href={app.deployment}>{app.title}</a>
-                            </p>
+                            </h2>
                             <div className="relative w-full h-0 pb-[56.25%] overflow-hidden rounded-lg bg-gray-800">
                                 <iframe
                                     src={app.deployment}
