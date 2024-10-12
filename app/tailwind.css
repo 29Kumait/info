@@ -5,7 +5,6 @@
 html,
 body {
   @apply bg-white dark:bg-gray-950;
-
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
@@ -90,3 +89,11 @@ body {
   @apply inline-flex whitespace-nowrap;
 }
 
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.drop-bounce {
+  @apply animate-[bounce_0.3s_ease-in-out];
+}
