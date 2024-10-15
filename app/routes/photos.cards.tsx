@@ -1,6 +1,5 @@
 import { LoaderFunction, json } from "@remix-run/node";
 import { useLoaderData, Link, useSearchParams, Outlet } from "@remix-run/react";
-import ErrorBoundary from "./errorBoundary";
 
 type Card = {
     slug: string;
@@ -124,6 +123,3 @@ const ArrowIcon = () => (
         </g>
     </svg>
 );
-
-
-export { ErrorBoundary }
