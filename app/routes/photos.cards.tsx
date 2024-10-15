@@ -82,9 +82,8 @@ export default function PhotosCards() {
                     className={ `mx-2 w-12 h-12 flex items-center justify-center border border-gray-900 rounded-full ${
                         currentPageIndex === 0 ? "text-gray-400 cursor-not-allowed pointer-events-none" : "text-blue-600 hover:bg-blue-600 hover:text-white"
                     }` }
-                    prefetch="intent"
                 >
-                    <p className="mx-4">{ currentPageIndex + 1 }</p>
+                    <span className="mx-4">{ currentPageIndex + 1 }</span>
                 </Link>
                 of
                 <Link
@@ -93,9 +92,8 @@ export default function PhotosCards() {
                     className={ `mx-2 w-12 h-12 flex items-center justify-center border border-gray-900 rounded-full ${
                         currentPageIndex === maxPageIndex ? "text-gray-400 cursor-not-allowed" : "text-blue-600 hover:bg-blue-600 hover:text-white"
                     }` }
-                    prefetch="intent"
                 >
-                    <p className="mx-4"> { maxPageIndex + 1 }</p> </Link>
+                    <span className="mx-4"> { maxPageIndex + 1 }</span> </Link>
             </div>
             <Outlet/>
         </div>
