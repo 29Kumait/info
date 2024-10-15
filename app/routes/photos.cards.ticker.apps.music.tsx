@@ -65,7 +65,7 @@ export default function PlaylistsSlides() {
         parseInt(fetcher.formData?.get("slideIndex") as string, 10) ??
         slideIndex;
 
-    const playlistsPerSlide: number = 2;
+    const playlistsPerSlide: number = 1;
     const totalPlaylists = playlists.length;
     const totalSlides = Math.ceil(totalPlaylists / playlistsPerSlide);
     const slideWidth = totalSlides > 0 ? 100 / totalSlides : 100;
@@ -103,9 +103,9 @@ export default function PlaylistsSlides() {
                             className="flex flex-shrink-0 flex-wrap justify-center items-center"
                             style={{ width: `${slideWidth}%` }}
                         >
-                            {slidePlaylists.map((playlist) => (
+                            {slidePlaylists.map((playlist, index) => (
                                 <div
-                                    key={playlist.year}
+                                    key={`${playlist.year}-${index}`}
                                     className="p-2 w-full sm:w-1/2 flex-none"
                                 >
                                     <div className="bg-white bg-opacity-20 rounded-lg shadow-glow hover-glow transition-transform transform hover:scale-105 mx-auto">
@@ -116,6 +116,7 @@ export default function PlaylistsSlides() {
                                                 title={`Playlist ${playlist.year}`}
                                                 src={playlist.embedUrl}
                                                 style={{ border: 0 }}
+                                                loading="lazy"
                                             />
                                         </div>
                                     </div>
@@ -164,7 +165,7 @@ export default function PlaylistsSlides() {
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
-                            strokeWidth={ 2 }
+                            strokeWidth={2}
                         >
                             <path d="M16.3944 12.0001L10 16.263V7.7371L16.3944 12.0001ZM19.3759 11.584L8.7773 4.5183C8.5476 4.3651 8.2371 4.4272 8.0839 4.6569C8.0292 4.7391 8 4.8356 8 4.9343V19.0658C8 19.342 8.2239 19.5658 8.5 19.5658C8.5987 19.5658 8.6952 19.5366 8.7773 19.4818L19.3759 12.4161C19.6057 12.2629 19.6678 11.9524 19.5146 11.7227C19.478 11.6678 19.4309 11.6206 19.3759 11.584Z"></path>
 

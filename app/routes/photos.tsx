@@ -263,7 +263,12 @@ export default function Photos() {
     };
 
     return (
-        <div className="relative mt-52 w-full rounded-lg z-10">
+        <div className=" relative  w-full rounded-lg z-10"
+             style={ {
+                 backgroundImage: "url('/bg.jpg')" ,
+                 backgroundSize: "cover" ,
+             } }
+        >
             <div
                 className="absolute inset-0 rounded-lg pointer-events-none"
                 style={ {
