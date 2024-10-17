@@ -2,9 +2,9 @@ import {Outlet , useLoaderData} from "@remix-run/react";
 import {LoaderFunction, json} from "@remix-run/node";
 import {FC} from "react";
 
-import Education from "./mdx/group1/education.mdx";
-import Experience from "./mdx/group1/experience.mdx";
-import FCode from "./mdx/group1/f-code.mdx";
+import SSkills from "./mdx/group2/soft-skills.mdx";
+import Skills from "./mdx/group2/technical-skills.mdx";
+import Summary from "./mdx/group2/summary.mdx";
 
 type Card = {
     slug: string;
@@ -12,22 +12,22 @@ type Card = {
 };
 
 const mdxFiles: Record<string, FC> = {
-    education: Education,
-    experience: Experience,
-    sCode: FCode,
+    sSkills: SSkills,
+    skills: Skills,
+    summary: Summary,
 };
 
 const cards: Card[] = [
-    {slug: "education", title: "Education"},
-    {slug: "experience", title: "Experience"},
-    {slug: "sCode", title: "Code Skills"},
+    {slug: "sSkills", title: "Soft Skills"},
+    {slug: "skills", title: "Technical Skills"},
+    {slug: "summary", title: "Summary"},
 ];
 
 export const loader: LoaderFunction = async () => {
     return json({cards});
 };
 
-export default function PhotosCardsGroup1() {
+export default function PhotosCardsGroup2() {
     const {cards} = useLoaderData<{ cards: Card[] }>();
 
     return (
@@ -45,9 +45,9 @@ export default function PhotosCardsGroup1() {
                     }
 
                     return (
-                        <div key={card.slug} className="p-6 border border-transparent bg-white rounded-lg transition-all duration-200 ease-out hover:scale-102 hover:border-blue-500 hover:shadow-md">
-                            <h2 className="text-lg opacity-70 mb-2">{ card.title }</h2>
-                            <Component/>
+                        <div key={card.slug} className="p-6 border border-transparent bg-white rounded-lg transition-transform duration-300 ease-in-out hover:scale-105 hover:border-blue-500 shadow-lg">
+                            <h2 className="text-lg opacity-70 mb-2">{card.title}</h2>
+                            <Component />
                         </div>
                     );
                 })}
