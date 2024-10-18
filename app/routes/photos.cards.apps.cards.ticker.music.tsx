@@ -88,7 +88,10 @@ export default function PlaylistsSlides() {
     return (
         <div
             className="mt-8 p-6 w-full text-gray-100 relative bg-cover bg-center"
-            style={{ backgroundImage: "url('/b.jpg')" }}
+            style={{ backgroundImage: "url('/b.jpg')" ,
+                boxShadow: "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)" ,
+
+            }}
         >
             <div className="text-center text-2xl sm:text-4xl mb-4 sm:mb-8">Playlists</div>
 
