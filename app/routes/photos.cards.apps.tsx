@@ -1,6 +1,6 @@
 import { json } from "@remix-run/node";
 import { connectDB } from "~/db/mongoDB.server";
-import {useLoaderData , useSearchParams , NavLink  , Outlet} from "@remix-run/react";
+import { useLoaderData, useSearchParams, NavLink, Outlet } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
 interface App {
@@ -36,15 +36,13 @@ export default function AppData() {
             className="mt-12 bg-cover"
             style={{
                 backgroundImage: "url('/bg.jpg')",
-                boxShadow: "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)" ,
-
+                boxShadow: "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
             }}
         >
             <h1 className="prose-2xl text-5xl md:text-6xl lg:text-9xl text-blue-100 m-6 lg:m-12">
                 Projects
             </h1>
             <div className="max-w-5xl mx-auto p-8 m-5 relative">
-                {/* Animated Border */}
                 <div className="absolute inset-0 rounded-xl overflow-hidden">
                     <div
                         className="w-full h-full rounded-xl animate-borderGlowOnce"
@@ -61,19 +59,34 @@ export default function AppData() {
 
                             return (
                                 <NavLink
-                                    preventScrollReset
                                     key={app.id}
                                     to={`?appId=${app.id}`}
-                                    prefetch="intent"
+                                    preventScrollReset
+                                    prefetch="viewport"
                                     className={({ isPending }) =>
                                         `whitespace-nowrap mr-2 md:mr-4 px-4 py-2 md:px-6 md:py-3 ${
                                             isActive
                                                 ? "border-b-4 border-[#FF7A9A] text-[#FF507A]"
                                                 : "text-[#BEE0DB] hover:text-[#FF7A9A]"
-                                        } ${isPending ? "opacity-79" : ""}`
+                                        } ${isPending ? "opacity-79" : ' '}`
                                     }
                                 >
-                                    {app.title}
+                                    {({ isPending }) => (
+                                        <>
+                                            {app.title}
+                                            {isPending && (
+                                                <div className="absolute inset-0 rounded-xl overflow-hidden">
+                                                    <div
+                                                        className="w-full h-full rounded-xl animate-borderGlowOnce"
+                                                        style={{
+                                                            background: 'linear-gradient(90deg, rgba(4, 9, 20, 0.9), rgba(3, 11, 25, 0.5), rgba(0,255,255,0.5), rgba(50, 50, 80, 0.8), rgba(12, 27, 52, 0.8), rgba(10, 10, 20, 0.9))',
+                                                            backgroundSize: '200% 200%',
+                                                        }}
+                                                    ></div>
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
                                 </NavLink>
                             );
                         })}
