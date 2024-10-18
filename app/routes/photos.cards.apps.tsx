@@ -70,7 +70,7 @@ export default function AppData() {
                                             isActive
                                                 ? "border-b-4 border-[#FF7A9A] text-[#FF507A]"
                                                 : "text-[#BEE0DB] hover:text-[#FF7A9A]"
-                                        } ${isPending ? "opacity-50" : ""}`
+                                        } ${isPending ? "opacity-79" : ""}`
                                     }
                                 >
                                     {app.title}

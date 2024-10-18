@@ -67,7 +67,7 @@ export default {
                 marquee: "marquee 20s linear infinite",
                 fadeIn: "fadeIn 0.5s forwards",
                 borderGlow: 'borderGlow 5s linear infinite',
-                borderGlowOnce: 'borderGlow 5s linear forwards',
+                borderGlowOnce: 'borderGlow 2s linear forwards',
             },
         },
     },
