@@ -16,8 +16,9 @@ export default function Ticker() {
     const duplicatedCards = [...cards, ...cards];
 
     return (
-        <div className="bg-transparent w-full text-gray-800 rounded-lg overflow-hidden mt-36 z-10 relative">
-            <div className="relative overflow-hidden px-6">
+        <div className="bg-transparent w-full text-gray-800 rounded-lg overflow-hidden mt-12 z-10 relative"
+                 >
+            <div className="relative overflow-hidden px-6 mb-12">
                 <div className="animate-marquee flex space-x-28 hover:animation-pause">
                     {duplicatedCards.map((card, index) => (
                         <div key={index} className="p-4 flex-shrink-0 w-[250px]">
