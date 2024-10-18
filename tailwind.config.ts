@@ -55,12 +55,19 @@ export default {
                     "0%": { transform: "translateX(0)" },
                     "100%": { transform: "translateX(-50%)" },
                 },
+                borderGlow: {
+                    '0%': { backgroundPosition: '0% 50%' },
+                    '100%': { backgroundPosition: '200% 50%' },
+                },
+
             },
             animation: {
                 bounceInSlow: "bounceIn 3s ease-out forwards",
                 fadeOutDelayed: "fadeOut 2s ease-in-out forwards 4s",
                 marquee: "marquee 20s linear infinite",
                 fadeIn: "fadeIn 0.5s forwards",
+                borderGlow: 'borderGlow 5s linear infinite',
+                borderGlowOnce: 'borderGlow 5s linear forwards',
             },
         },
     },
