@@ -40,7 +40,6 @@ export function Card({ title, children }: CardProps) {
     return (
         <div className="relative bg-dark-blue-black-01 dark:bg-dark-blue-black-03 text-gray-200 dark:text-white rounded-lg shadow-glow p-8 transition-transform transform hover:scale-105 hover:-hue-rotate-15 hover:shadow-xl hover:shadow-blue-600/50 resource-card">
             <div className="absolute inset-0 z-[-1] transition-opacity duration-500 opacity-0 resource-card::before"></div>
-
             <h3 className="text-xl font-semibold mb-2">{title}</h3>
             <div className="text-gray-400 dark:text-gray-300 mb-6">{children}</div>
         </div>
