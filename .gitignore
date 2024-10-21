@@ -2,7 +2,7 @@ node_modules
 
 /.cache
 /build
-
+.env*
 .env
 .env.local
 
@@ -14,3 +14,5 @@ node_modules
 README.md
 NOTES.md
 
+.vercel
+.env.development.local
