@@ -21,7 +21,7 @@
     "cookie": "^1.0.0",
     "highlight.js": "^11.10.0",
     "isbot": "^5.1.17",
-    "mongodb": "^6.9.0",
+    "mongodb": "^6.10.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "remark-frontmatter": "^5.0.0",
