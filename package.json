@@ -30,7 +30,7 @@
     "type": "^2.7.3"
   },
   "devDependencies": {
-    "@mdx-js/rollup": "^3.0.1",
+    "@mdx-js/rollup": "^3.1.0",
     "@remix-run/dev": "^2.12.1",
     "@tailwindcss/typography": "^0.5.15",
     "@types/react": "^18.3.11",
