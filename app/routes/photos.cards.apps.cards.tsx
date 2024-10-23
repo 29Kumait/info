@@ -18,8 +18,8 @@ const mdxFiles: Record<string, FC> = {
 };
 
 const cards: Card[] = [
-    {slug: "sSkills", title: "Soft Skills"},
     {slug: "skills", title: "Technical Skills"},
+    {slug: "sSkills", title: "Soft Skills"},
     {slug: "summary", title: "Summary"},
 ];
 
