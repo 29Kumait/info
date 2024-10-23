@@ -17,8 +17,9 @@ const mdxFiles: Record<string , FC> = {
 };
 
 const cards: CardData[] = [
-    {slug: "contact" , title: "CONTACT INFO"} ,
     {slug: "media" , title: "SOCIAL MEDIA"} ,
+    {slug: "contact" , title: "CONTACT INFO"} ,
+
 ];
 
 export const loader: LoaderFunction = async () => {
