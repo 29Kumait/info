@@ -82,7 +82,7 @@ export default function AppData() {
                                                 : "text-[#BEE0DB] hover:text-[#FF7A9A]"
                                         }` }
                                     >
-                                        { activeApp.github }
+                                        { app.github }
                                     </NavLink>
                                 );
                             }) }
