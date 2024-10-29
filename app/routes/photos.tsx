@@ -8,6 +8,7 @@ import {
     DndContext,
     useSensor,
     useSensors,
+    useDraggable,
     PointerSensor,
     DragEndEvent,
 } from "@dnd-kit/core";
