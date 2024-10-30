@@ -19,7 +19,6 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@vitejs/plugin-react": "^4.3.3",
     "cookie": "^1.0.1",
-    "crypto-js": "^4.2.0",
     "highlight.js": "^11.10.0",
     "intl-parse-accept-language": "^1.0.0",
     "is-ip": "^5.0.1",
