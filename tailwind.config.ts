@@ -71,7 +71,7 @@ export default {
                     "0%": { transform: "translateX(0)" },
                     "100%": { transform: "translateX(-50%)" },
                 },
-                borderGlow: {
+                borderGlowOnce: {
                     '0%': { backgroundPosition: '0% 50%' },
                     '100%': { backgroundPosition: '200% 50%' },
                 },
