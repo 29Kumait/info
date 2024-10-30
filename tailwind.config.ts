@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type {Config} from "tailwindcss";
 import typography from '@tailwindcss/typography';
 import ratio from "@tailwindcss/aspect-ratio";
 
@@ -16,6 +16,7 @@ export default {
                 'mirror': '0 8px 32px rgba(0, 0, 0, 0.25)',
 
             },
+
             dropShadow: {
                 'bright-glow': '0 0 4em rgba(255, 255, 255, 0.9)',
                 'blue-glow': '0 0 4em rgba(0, 123, 255, 0.9)',
@@ -83,7 +84,8 @@ export default {
                 marquee: "marquee 20s linear infinite",
                 fadeIn: "fadeIn 0.5s forwards",
                 borderGlow: 'borderGlow 5s linear infinite',
-                borderGlowOnce: 'borderGlow 2s linear forwards',
+                borderGlowOnce: 'borderGlowOnce 7s linear forwards' ,
+
             },
         },
     },
