@@ -25,6 +25,10 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   ssr: {
-    external: ['crypto'],
+    noExternal: ["@remix-run/*"],
+    external: ["node:crypto"],
+  },
+  optimizeDeps: {
+    exclude: ["node:crypto"],
   },
 });
