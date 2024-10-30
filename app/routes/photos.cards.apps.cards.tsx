@@ -1,8 +1,7 @@
 import {Outlet , useLoaderData} from "@remix-run/react";
-import {LoaderFunction, json} from "@remix-run/node";
+import {json , LoaderFunction} from "@remix-run/node";
 import {FC} from "react";
 
-import SSkills from "./mdx/group2/soft-skills.mdx";
 import Skills from "./mdx/group2/technical-skills.mdx";
 import Summary from "./mdx/group2/summary.mdx";
 
@@ -12,14 +11,12 @@ type Card = {
 };
 
 const mdxFiles: Record<string, FC> = {
-    sSkills: SSkills,
     skills: Skills,
     summary: Summary,
 };
 
 const cards: Card[] = [
     {slug: "skills", title: "Technical Skills"},
-    {slug: "sSkills", title: "Soft Skills"},
     {slug: "summary", title: "Summary"},
 ];
 

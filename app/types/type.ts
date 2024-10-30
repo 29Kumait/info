@@ -33,4 +33,21 @@ export interface Position {
     y: number;
     zIndex: number;
 }
+export type EventType = "push" | "pull_request" | "issues" | "unknown_event";
+
+export interface Event {
+    id: string;
+    eventType: EventType;
+    payload: string;
+}
+
+export interface EventData {
+
+    repository?: {
+        full_name?: string;
+    };
+    pusher?: {
+        name?: string;
+    };
+}
 
