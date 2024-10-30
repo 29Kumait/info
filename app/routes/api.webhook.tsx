@@ -1,4 +1,4 @@
-import {ActionFunction , json} from "@remix-run/node";
+    import {ActionFunction , json} from "@remix-run/node";
 import crypto from "crypto";
 import {insertEvent} from "~/db/eventStorage.server";
 
@@ -30,3 +30,4 @@ export const action: ActionFunction = async ({ request }) => {
 
     return json({ success: true, id: deliveryId }, 201);
 };
+nnnn
