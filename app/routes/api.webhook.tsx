@@ -1,8 +1,10 @@
-    import {ActionFunction , json} from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import crypto from "crypto";
-import {insertEvent} from "~/db/eventStorage.server";
+import { insertEvent } from "../db/eventStorage.server.ts"; // Adjust if path differs
+import process from "node:process";
 
-export const action: ActionFunction = async ({ request }) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
     if (request.method !== "POST") {
         return json({ message: "Method not allowed" }, 405);
     }
@@ -11,9 +13,10 @@ export const action: ActionFunction = async ({ request }) => {
     const eventType = request.headers.get("X-GitHub-Event") || "unknown_event";
     const deliveryId = request.headers.get("X-GitHub-Delivery");
 
+    // Validate webhook signature
     const signature = request.headers.get("X-Hub-Signature-256");
     const generatedSignature = `sha256=${crypto
-        .createHmac("sha256", process.env.GITHUB_WEBHOOK_SECRET as string)
+        .createHmac("sha256", process.env.WEBHOOK_SECRET || "")
         .update(payload)
         .digest("hex")}`;
 
@@ -21,8 +24,12 @@ export const action: ActionFunction = async ({ request }) => {
         return json({ message: "Signature mismatch" }, 401);
     }
 
-    const event = { id: deliveryId as string, eventType, payload };
-    const success = await insertEvent(event);
+    // Store the event in MongoDB
+    const success = await insertEvent({
+        id: deliveryId || "unknown",
+        eventType,
+        payload,
+    });
 
     if (!success) {
         return json({ message: "Failed to save event" }, 500);
@@ -30,4 +37,3 @@ export const action: ActionFunction = async ({ request }) => {
 
     return json({ success: true, id: deliveryId }, 201);
 };
-nnnn

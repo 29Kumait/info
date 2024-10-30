@@ -11,8 +11,6 @@ export const meta: MetaFunction = () => {
 
 
 export const loader: LoaderFunction = async () => {
-  return redirect(`photos/cards/apps/cards/ticker/music/cards`);
+  return redirect(`photos/cards`);
 };
 
-import ErrorBoundary from "./errorBoundary";
-export { ErrorBoundary };

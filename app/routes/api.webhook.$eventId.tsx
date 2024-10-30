@@ -1,7 +1,8 @@
-import {ActionFunction , json} from "@remix-run/node";
-import {deleteEventById} from "~/db/eventStorage.server";
+import { ActionFunctionArgs, json } from "@remix-run/node";
+import { deleteEventById } from "../db/eventStorage.server.ts";
 
-export const action: ActionFunction = async ({ params, request }) => {
+
+export const action = async ({ request, params }: ActionFunctionArgs) => {
     if (request.method !== "DELETE") {
         return json({ message: "Method not allowed" }, 405);
     }

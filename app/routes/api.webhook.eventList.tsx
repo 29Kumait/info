@@ -1,29 +1,26 @@
-import {Form , useLoaderData} from "@remix-run/react";
-import type {FC} from "react";
-import EventCard from "./api.webhook.eventCard";
-import type {Event} from "~/types/type";
+import { useLoaderData } from "@remix-run/react";
+import { json } from "@remix-run/node";
+import { getAllEvents } from "~/db/eventStorage.server";
+import type { LoaderFunction } from "@remix-run/node";
 
-interface LoaderData {
-    events: Event[];
-}
+export const loader: LoaderFunction = async () => {
+    const events = await getAllEvents();
+    return json({ events });
+};
 
-const EventList: FC = () => {
-    const { events } = useLoaderData<LoaderData>();
+export default function EventListPage() {
+    const { events } = useLoaderData<typeof loader>();
 
     return (
         <div>
-            {events.map((event) => (
-                <div key={event.id} className="mb-4">
-                    <EventCard eventType={event.eventType} eventData={JSON.parse(event.payload)} />
-                    <Form method="delete" action={`/api/webhook/${event.id}`}>
-                        <button type="submit" className="text-red-500">
-                            Delete
-                        </button>
-                    </Form>
-                </div>
-            ))}
+            <h1>GitHub Webhook Events</h1>
+            <ul>
+                {events.map((event: { id: string; eventType: string; payload: string }) => (                    <li key={event.id}>
+                        <h2>{event.eventType}</h2>
+                        <p>{event.payload}</p>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
-};
-
-export default EventList;
+}
