@@ -1,11 +1,11 @@
-import type { ActionFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { insertEvent } from "../db/eventStorage.server.ts";
+import type {ActionFunctionArgs} from "@remix-run/node";
+import {json} from "@remix-run/node";
+import crypto from "crypto";
+import {insertEvent} from "~/db/eventStorage.server"; // Adjust if needed
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-    // Handle GET requests with a basic message or redirection
     if (request.method === "GET") {
-        return json({ message: "Webhook endpoint: please use POST method" }, 400);
+        return json({ message: "This endpoint is for POST requests only." }, 400);
     }
 
     if (request.method !== "POST") {
@@ -16,6 +16,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const eventType = request.headers.get("X-GitHub-Event") || "unknown_event";
     const deliveryId = request.headers.get("X-GitHub-Delivery");
 
+    // Verify the webhook signature using HMAC SHA-256
     const webhookSecret = process.env.WEBHOOK_SECRET;
     const secretHeader = request.headers.get("X-Hub-Signature-256");
 
@@ -23,10 +24,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         throw new Error("WEBHOOK_SECRET environment variable is not set.");
     }
 
-    if (!secretHeader || secretHeader !== webhookSecret) {
+    // Calculate and compare signatures for security
+    const generatedSignature = `sha256=${crypto
+        .createHmac("sha256", webhookSecret)
+        .update(payload)
+        .digest("hex")}`;
+
+    if (!secretHeader || secretHeader !== generatedSignature) {
         return json({ message: "Unauthorized request" }, 401);
     }
 
+    // Store the event in MongoDB
     const success = await insertEvent({
         id: deliveryId || "unknown",
         eventType,
