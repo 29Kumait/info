@@ -1,7 +1,7 @@
 import type {ActionFunctionArgs} from "@remix-run/node";
 import {json} from "@remix-run/node";
 import crypto from "crypto";
-import {insertEvent} from "~/db/eventStorage.server"; // Adjust if needed
+import {insertEvent} from "~/db/eventStorage.server";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
     if (request.method === "GET") {
@@ -24,7 +24,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         throw new Error("WEBHOOK_SECRET environment variable is not set.");
     }
 
-    // Calculate and compare signatures for security
     const generatedSignature = `sha256=${crypto
         .createHmac("sha256", webhookSecret)
         .update(payload)
@@ -34,7 +33,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         return json({ message: "Unauthorized request" }, 401);
     }
 
-    // Store the event in MongoDB
     const success = await insertEvent({
         id: deliveryId || "unknown",
         eventType,
