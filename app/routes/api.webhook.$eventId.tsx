@@ -1,5 +1,5 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
-import { deleteEventById } from "../db/eventStorage.server.ts";
+import {ActionFunctionArgs , json} from "@remix-run/node";
+import {deleteEventById} from "~/db/eventStorage.server";
 
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {

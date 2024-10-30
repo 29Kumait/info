@@ -1,4 +1,5 @@
 import {connectDB} from "./mongoDB.server";
+import invariant from "tiny-invariant";
 
 interface Event {
     id: string;
@@ -8,7 +9,11 @@ interface Event {
 
 export async function insertEvent(event: Event): Promise<boolean> {
     const { db } = await connectDB();
+    invariant(db, "Failed to connect to the database");
+
     const result = await db.collection("events").insertOne(event);
+    invariant(result.acknowledged, "No data found in the database");
+
     return result.acknowledged;
 }
 
@@ -16,7 +21,7 @@ export async function getAllEvents(): Promise<Event[]> {
     const { db } = await connectDB();
     const events = await db.collection("events").find({}).toArray();
 
-    return events.map(({ _id, ...rest }) => ({
+    return events.map((rest) => ({
         id: rest.id,
         eventType: rest.eventType,
         payload: rest.payload

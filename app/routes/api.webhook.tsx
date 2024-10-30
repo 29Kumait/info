@@ -4,9 +4,9 @@ import crypto from "crypto";
 import {insertEvent} from "~/db/eventStorage.server";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-    if (request.method === "GET") {
-        return json({ message: "This endpoint is for POST requests only." }, 400);
-    }
+    // if (request.method === "GET") {
+    //     return json({ message: "This endpoint is for POST requests only." }, 400);
+    // }
 
     if (request.method !== "POST") {
         return json({ message: "Method not allowed" }, 405);
