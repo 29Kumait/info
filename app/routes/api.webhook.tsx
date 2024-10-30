@@ -1,47 +1,50 @@
-import type {ActionFunctionArgs} from "@remix-run/node";
-import {json} from "@remix-run/node";
+// app/routes/api/webhook.ts
+import type { ActionFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { db } from "~/utils/db.server";
 import crypto from "crypto";
-import {insertEvent} from "~/db/eventStorage.server";
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-    if (request.method === "GET") {
-        return json({ message: "This endpoint is for POST requests only." }, 400);
-    }
+export const action: ActionFunction = async ({ request }) => {
+  if (request.method !== "POST") {
+    return json({ message: "Method not allowed" }, { status: 405 });
+  }
 
-    if (request.method !== "POST") {
-        return json({ message: "Method not allowed" }, 405);
-    }
+  const signature = request.headers.get("X-Hub-Signature-256");
+  const deliveryId = request.headers.get("X-GitHub-Delivery");
+  const eventType = request.headers.get("X-GitHub-Event") || "unknown_event";
 
-    const payload = await request.text();
-    const eventType = request.headers.get("X-GitHub-Event") || "unknown_event";
-    const deliveryId = request.headers.get("X-GitHub-Delivery");
+  if (!signature || !deliveryId) {
+    return json({ message: "Missing required headers" }, { status: 400 });
+  }
 
-    // Verify the webhook signature using HMAC SHA-256
-    const webhookSecret = process.env.WEBHOOK_SECRET;
-    const secretHeader = request.headers.get("X-Hub-Signature-256");
+  const secret = process.env.WEBHOOK_SECRET || "";
+  if (!secret) {
+    console.error("WEBHOOK_SECRET is not set");
+    return json({ message: "Server error" }, { status: 500 });
+  }
 
-    if (!webhookSecret) {
-        throw new Error("WEBHOOK_SECRET environment variable is not set.");
-    }
+  const payload = await request.text();
 
-    const generatedSignature = `sha256=${crypto
-        .createHmac("sha256", webhookSecret)
-        .update(payload)
-        .digest("hex")}`;
+  // Validate the signature
+  const hmac = crypto.createHmac("sha256", secret);
+  const digest = `sha256=${hmac.update(payload).digest("hex")}`;
 
-    if (!secretHeader || secretHeader !== generatedSignature) {
-        return json({ message: "Unauthorized request" }, 401);
-    }
+  if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest))) {
+    return json({ message: "Signature mismatch" }, { status: 401 });
+  }
 
-    const success = await insertEvent({
-        id: deliveryId || "unknown",
-        eventType,
-        payload,
+  // Store the event in MongoDB
+  try {
+    const eventsCollection = db.collection("events");
+    await eventsCollection.insertOne({
+      _id: deliveryId,
+      eventType,
+      payload,
+      receivedAt: new Date(),
     });
-
-    if (!success) {
-        return json({ message: "Failed to save event" }, 500);
-    }
-
-    return json({ success: true, id: deliveryId }, 201);
+    return json({ id: deliveryId }, { status: 201 });
+  } catch (error) {
+    console.error("Error saving event:", error);
+    return json({ message: "Failed to save event" }, { status: 500 });
+  }
 };
