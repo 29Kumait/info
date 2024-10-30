@@ -35,9 +35,15 @@ export interface Position {
 }
 export type EventType = "push" | "pull_request" | "issues" | "unknown_event";
 
+// export interface Event {
+//     id: string;
+//     eventType: EventType;
+//     payload: string;
+// }
+// app/types/event.ts
 export interface Event {
     id: string;
-    eventType: EventType;
+    eventType: string;
     payload: string;
 }
 

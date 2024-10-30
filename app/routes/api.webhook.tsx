@@ -1,13 +1,13 @@
-import crypto from "node:crypto";
-
-import type {ActionFunctionArgs} from "@remix-run/node";
+import type {ActionFunction} from "@remix-run/node";
 import {json} from "@remix-run/node";
 import {insertEvent} from "~/db/eventStorage.server";
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action: ActionFunction = async ({ request }) => {
     if (request.method !== "POST") {
         return json({ message: "Method not allowed" }, 405);
     }
+
+    const crypto = await import("crypto");
 
     const payload = await request.text();
     const eventType = request.headers.get("X-GitHub-Event") || "unknown_event";
@@ -25,7 +25,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         .update(payload)
         .digest("hex")}`;
 
-    if (signature !== generatedSignature) {
+    if (!signature || signature !== generatedSignature) {
         return json({ message: "Signature mismatch" }, 401);
     }
 
@@ -41,3 +41,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     return json({ success: true, id: deliveryId }, 201);
 };
+
+export default function WebhookRoute() {
+    return null;
+}
