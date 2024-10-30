@@ -24,8 +24,4 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-
-  ssr: {
-    noExternal: ["@remix-run/*", "remix-utils"],
-  },
 });
