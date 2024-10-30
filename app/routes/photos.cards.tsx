@@ -1,4 +1,4 @@
-import {Outlet , useLoaderData} from "@remix-run/react";
+import {useLoaderData} from "@remix-run/react";
 import {json , LoaderFunction} from "@remix-run/node";
 import {FC} from "react";
 
@@ -52,8 +52,6 @@ export default function PhotosCardsGroup1() {
                     );
                 }) }
             </div>
-            <Outlet/>
         </div>
     );
 }
-
