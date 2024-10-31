@@ -1,7 +1,6 @@
 import type {ActionFunction} from "@remix-run/node";
 import {json} from "@remix-run/node";
 import {insertEvent} from "~/db/eventStorage.server";
-import invariant from "tiny-invariant";
 
 export const action: ActionFunction = async ({ request }) => {
     if (request.method !== "POST") {
@@ -30,18 +29,16 @@ export const action: ActionFunction = async ({ request }) => {
         .update(payloadText)
         .digest("hex")}`;
 
-    //  debugging
-    console.log("Received signature:", signature);
-    console.log("Generated signature:", generatedSignature);
-
     if (signature !== generatedSignature) {
         return json({ message: "Signature mismatch" }, 401);
     }
 
-
-    const payload = JSON.parse(payloadText);
-    invariant( payload ,"Invalid JSON payload 400" )
-
+    let payload;
+    try {
+        payload = JSON.parse(payloadText);
+    } catch {
+        return json({ message: "Invalid JSON payload" }, 400);
+    }
 
     const success = await insertEvent({
         id: deliveryId || "unknown",
