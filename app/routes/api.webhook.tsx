@@ -1,6 +1,7 @@
 import type {ActionFunction} from "@remix-run/node";
 import {json} from "@remix-run/node";
 import {insertEvent} from "~/db/eventStorage.server";
+import invariant from "tiny-invariant";
 
 export const action: ActionFunction = async ({ request }) => {
     if (request.method !== "POST") {
@@ -9,7 +10,7 @@ export const action: ActionFunction = async ({ request }) => {
 
     const crypto = await import("crypto");
 
-    const payload = await request.text();
+    const payloadText = await request.text();
     const eventType = request.headers.get("X-GitHub-Event") || "unknown_event";
     const deliveryId = request.headers.get("X-GitHub-Delivery");
 
@@ -26,7 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
 
     const generatedSignature = `sha256=${crypto
         .createHmac("sha256", webhookSecret)
-        .update(payload)
+        .update(payloadText)
         .digest("hex")}`;
 
     //  debugging
@@ -36,6 +37,11 @@ export const action: ActionFunction = async ({ request }) => {
     if (signature !== generatedSignature) {
         return json({ message: "Signature mismatch" }, 401);
     }
+
+
+    const payload = JSON.parse(payloadText);
+    invariant( payload ,"Invalid JSON payload 400" )
+
 
     const success = await insertEvent({
         id: deliveryId || "unknown",
