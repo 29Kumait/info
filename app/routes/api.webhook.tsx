@@ -7,18 +7,33 @@ export const action: ActionFunction = async ({ request }) => {
         return json({ message: "Method not allowed" }, 405);
     }
 
+    const crypto = await import("crypto");
+
     const payload = await request.text();
     const eventType = request.headers.get("X-GitHub-Event") || "unknown_event";
     const deliveryId = request.headers.get("X-GitHub-Delivery");
 
-    const generatedSignature = process.env.GENERATED_SIGNATURE;
+    const webhookSecret = process.env.WEBHOOK_SECRET;
     const signature = request.headers.get("X-Hub-Signature-256");
 
-    if (!generatedSignature) {
-        throw new Error("GENERATED_SIGNATURE environment variable is not set.");
+    if (!webhookSecret) {
+        throw new Error("WEBHOOK_SECRET environment variable is not set.");
     }
 
-    if (!signature || signature !== `sha256=${generatedSignature}`) {
+    if (!signature) {
+        return json({ message: "Missing signature" }, 400);
+    }
+
+    const generatedSignature = `sha256=${crypto
+        .createHmac("sha256", webhookSecret)
+        .update(payload)
+        .digest("hex")}`;
+
+    //  debugging
+    console.log("Received signature:", signature);
+    console.log("Generated signature:", generatedSignature);
+
+    if (signature !== generatedSignature) {
         return json({ message: "Signature mismatch" }, 401);
     }
 
