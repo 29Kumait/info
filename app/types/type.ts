@@ -40,50 +40,38 @@ export type EventType =
     | "fork"
     | "star"
     | "default";
-
-export interface Event {
-    id: string;
-    eventType: string;
-    payload: Payload;
-}
-
-export interface Payload {
-    repository: Repository;
-    sender?: User;
-    pusher?: {
-        name?: string;
-    };
-}
-
+// Update types/type.ts
 export interface Repository {
-    name: string;
-    full_name: string;
-    html_url: string;
+    name?: string;
+    full_name?: string;
+    html_url?: string;
     description?: string;
-    owner: User;
-    fork: boolean;
+    owner?: { login: string; avatar_url?: string };
+    fork?: boolean;
 }
 
-export interface User {
-    login: string;
-    avatar_url: string;
-}
-
-export interface Commit {
-    id: string;
-    message: string;
-    url: string;
-    author: { name: string };
+export interface Pusher {
+    name?: string;
 }
 
 export interface PullRequest {
     title?: string;
-    url?: string;
-    user?: { login?: string };
 }
 
 export interface Issue {
     title?: string;
-    url?: string;
-    user?: { login?: string };
+}
+
+export interface Payload {
+    timestamp?: string;
+    repository?: Repository;
+    pusher?: Pusher;
+    pull_request?: PullRequest;
+    issue?: Issue;
+}
+
+export interface Event {
+    id: string;
+    eventType: string;
+    payload?: Payload;
 }
