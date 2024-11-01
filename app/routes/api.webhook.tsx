@@ -4,7 +4,6 @@ import {getAllEvents , insertEvent} from "~/db/eventStorage.server";
 import {sanitizeEventData} from "~/utils/sanitizeData";
 import {format} from "date-fns";
 
-// Action function to handle incoming GitHub webhooks
 export async function action({ request }: ActionFunctionArgs) {
     if (request.method !== "POST") {
         return json({ message: "Method not allowed" }, { status: 405 });
@@ -49,7 +48,6 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ success: true, id: deliveryId }, { status: 201 });
 }
 
-// Loader function to fetch all events
 export async function loader() {
     const events = await getAllEvents();
     return json(events);
@@ -89,7 +87,6 @@ interface EventCardProps {
     event: Event;
 }
 
-// Helper function for styling based on event type
 function getEventTypeStyle(eventType: string): string {
     const typeStyles: Record<string, string> = {
         push: "border-blue-500 bg-blue-50",
@@ -144,11 +141,9 @@ function EventCard({ event }: EventCardProps) {
     );
 }
 
-// Main component rendering all events
 export default function WebhookRoute() {
     const events = useLoaderData<typeof loader>();
 
-    // Categorizing events by event type for organization
     const categorizedEvents = events.reduce((acc, event) => {
         const type = event.eventType;
         if (!acc[type]) acc[type] = [];
