@@ -5,47 +5,56 @@ import {sanitizeEventData} from "~/utils/sanitizeData";
 import {format} from "date-fns";
 
 export async function action({ request }: ActionFunctionArgs) {
-    if (request.method !== "POST") {
-        return json({ message: "Method not allowed" }, { status: 405 });
-    }
+    try {
+        if (request.method !== "POST") {
+            return json({ message: "Method not allowed" }, { status: 405 });
+        }
 
-    const crypto = await import("crypto");
-    const payloadText = await request.text();
-    const eventType = request.headers.get("X-GitHub-Event") || "unknown_event";
-    const deliveryId = request.headers.get("X-GitHub-Delivery") || "unknown";
+        const crypto = await import("crypto");
+        const payloadText = await request.text();
+        const eventType = request.headers.get("X-GitHub-Event") || "unknown_event";
+        const deliveryId = request.headers.get("X-GitHub-Delivery") || "unknown";
 
-    const webhookSecret = process.env.WEBHOOK_SECRET;
-    const signature = request.headers.get("X-Hub-Signature-256");
+        const webhookSecret = process.env.WEBHOOK_SECRET;
+        const signature = request.headers.get("X-Hub-Signature-256");
 
-    if (!webhookSecret) {
-        throw new Response("WEBHOOK_SECRET environment variable is not set.", {
-            status: 500,
+        if (!webhookSecret) {
+            return json({ message: "Webhook secret is not configured." }, { status: 500 });
+        }
+
+        const generatedSignature = `sha256=${crypto
+            .createHmac("sha256", webhookSecret)
+            .update(payloadText)
+            .digest("hex")}`;
+
+        if (signature !== generatedSignature) {
+            return json({ message: "Signature mismatch" }, { status: 401 });
+        }
+
+        let payload;
+        try {
+            payload = JSON.parse(payloadText);
+        } catch {
+            return json({ message: "Invalid JSON payload." }, { status: 400 });
+        }
+
+        const sanitizedPayload = sanitizeEventData(payload);
+
+        const success = await insertEvent({
+            id: deliveryId,
+            eventType,
+            payload: sanitizedPayload,
         });
+
+        if (!success) {
+            return json({ message: "Failed to save event" }, { status: 500 });
+        }
+
+        return json({ success: true, id: deliveryId }, { status: 201 });
+    } catch (error) {
+        console.error("Webhook processing error:", error);
+        return json({ message: "Unexpected server error." }, { status: 500 });
     }
-
-    const generatedSignature = `sha256=${crypto
-        .createHmac("sha256", webhookSecret)
-        .update(payloadText)
-        .digest("hex")}`;
-
-    if (signature !== generatedSignature) {
-        return json({ message: "Signature mismatch" }, { status: 401 });
-    }
-
-    const payload = await request.json();
-    const sanitizedPayload = sanitizeEventData(payload);
-
-    const success = await insertEvent({
-        id: deliveryId,
-        eventType,
-        payload: sanitizedPayload,
-    });
-
-    if (!success) {
-        return json({ message: "Failed to save event" }, { status: 500 });
-    }
-
-    return json({ success: true, id: deliveryId }, { status: 201 });
 }
 
 export async function loader() {
@@ -80,7 +89,7 @@ interface Payload {
 interface Event {
     id: string;
     eventType: string;
-    payload?: Payload; // Make payload optional
+    payload?: Payload;
 }
 
 interface EventCardProps {
@@ -100,7 +109,6 @@ function getEventTypeStyle(eventType: string): string {
     return typeStyles[eventType] || typeStyles.default;
 }
 
-// EventCard Component
 function EventCard({ event }: EventCardProps) {
     const formattedDate = event.payload?.timestamp
         ? format(new Date(event.payload.timestamp), "PPP p")
