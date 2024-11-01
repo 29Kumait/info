@@ -1,27 +1,25 @@
-import type {ActionFunction} from "@remix-run/node";
-import {json} from "@remix-run/node";
-import {insertEvent} from "~/db/eventStorage.server";
+import {ActionFunctionArgs , json} from "@remix-run/node";
+import {useLoaderData} from "@remix-run/react";
+import {getAllEvents , insertEvent} from "~/db/eventStorage.server";
 
-export const action: ActionFunction = async ({ request }) => {
+
+export async function action({ request }: ActionFunctionArgs) {
     if (request.method !== "POST") {
-        return json({ message: "Method not allowed" }, 405);
+        return json({ message: "Method not allowed" }, { status: 405 });
     }
 
     const crypto = await import("crypto");
-
     const payloadText = await request.text();
     const eventType = request.headers.get("X-GitHub-Event") || "unknown_event";
-    const deliveryId = request.headers.get("X-GitHub-Delivery");
+    const deliveryId = request.headers.get("X-GitHub-Delivery") || "unknown";
 
     const webhookSecret = process.env.WEBHOOK_SECRET;
     const signature = request.headers.get("X-Hub-Signature-256");
 
     if (!webhookSecret) {
-        throw new Error("WEBHOOK_SECRET environment variable is not set.");
-    }
-
-    if (!signature) {
-        return json({ message: "Missing signature" }, 400);
+        throw new Response("WEBHOOK_SECRET environment variable is not set.", {
+            status: 500,
+        });
     }
 
     const generatedSignature = `sha256=${crypto
@@ -30,29 +28,42 @@ export const action: ActionFunction = async ({ request }) => {
         .digest("hex")}`;
 
     if (signature !== generatedSignature) {
-        return json({ message: "Signature mismatch" }, 401);
+        return json({ message: "Signature mismatch" }, { status: 401 });
     }
 
-    let payload;
-    try {
-        payload = JSON.parse(payloadText);
-    } catch {
-        return json({ message: "Invalid JSON payload" }, 400);
-    }
+    const payload = await request.json();
 
     const success = await insertEvent({
-        id: deliveryId || "unknown",
+        id: deliveryId,
         eventType,
         payload,
     });
 
     if (!success) {
-        return json({ message: "Failed to save event" }, 500);
+        return json({ message: "Failed to save event" }, { status: 500 });
     }
 
-    return json({ success: true, id: deliveryId }, 201);
-};
+    return json({ success: true, id: deliveryId }, { status: 201 });
+}
+
+export async function loader() {
+    const events = await getAllEvents();
+    return json(events);
+}
 
 export default function WebhookRoute() {
-    return null;
+    const events = useLoaderData<typeof loader>();
+
+    return (
+        <div>
+            <h1>GitHub Events</h1>
+                {events.map((event) => (
+                    <ul key={event.id}>
+                        <li> ID : {event.id}</li>
+                        <li>Event Type: {event.eventType}</li>
+                        <li>Repository: {event.payload.repository?.name}</li>
+                    </ul>
+                ))}
+        </div>
+    );
 }
