@@ -1,25 +1,34 @@
 import {connectDB} from "./mongoDB.server";
-import invariant from "tiny-invariant";
-import type {Event} from "~/types/type";
+import type {Event , Payload} from "~/types/type";
 
 export async function insertEvent(event: Event): Promise<boolean> {
     const { db } = await connectDB();
-    invariant(db, "Failed to connect to the database");
-
     const result = await db.collection("events").insertOne(event);
-    invariant(result.acknowledged, "Failed to insert event into the database");
-
     return result.acknowledged;
 }
 
 export async function getAllEvents(): Promise<Event[]> {
     const { db } = await connectDB();
-    const events = await db.collection("events").find({}).toArray();
 
-    return events.map((rest) => ({
-        id: rest.id,
-        eventType: rest.eventType,
-        payload: rest.payload,
+    const projection = {
+        id: 1,
+        eventType: 1,
+        "payload.repository.name": 1,
+    };
+
+    const events = await db
+        .collection("events")
+        .find({}, { projection })
+        .toArray();
+
+    return events.map(event => ({
+        id: event.id,
+        eventType: event.eventType,
+        payload: {
+            repository: {
+                name: event.payload?.repository?.name,
+            },
+        } as Payload,
     }));
 }
 

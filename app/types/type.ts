@@ -1,5 +1,3 @@
-// app/types/index.ts
-
 export interface Tile {
     x: number;
     y: number;
@@ -33,27 +31,59 @@ export interface Position {
     y: number;
     zIndex: number;
 }
-export type EventType = "push" | "pull_request" | "issues" | "unknown_event";
 
-// export interface Event {
-//     id: string;
-//     eventType: EventType;
-//     payload: string;
-// }
-// app/types/event.ts
+export type EventType =
+    | "push"
+    | "pull_request"
+    | "issues"
+    | "issue_comment"
+    | "fork"
+    | "star"
+    | "default";
+
 export interface Event {
     id: string;
     eventType: string;
-    payload: string;
+    payload: Payload;
 }
 
-export interface EventData {
-
-    repository?: {
-        full_name?: string;
-    };
+export interface Payload {
+    repository: Repository;
+    sender?: User;
     pusher?: {
         name?: string;
     };
 }
 
+export interface Repository {
+    name: string;
+    full_name: string;
+    html_url: string;
+    description?: string;
+    owner: User;
+    fork: boolean;
+}
+
+export interface User {
+    login: string;
+    avatar_url: string;
+}
+
+export interface Commit {
+    id: string;
+    message: string;
+    url: string;
+    author: { name: string };
+}
+
+export interface PullRequest {
+    title?: string;
+    url?: string;
+    user?: { login?: string };
+}
+
+export interface Issue {
+    title?: string;
+    url?: string;
+    user?: { login?: string };
+}
