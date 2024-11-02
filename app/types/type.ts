@@ -32,46 +32,94 @@ export interface Position {
     zIndex: number;
 }
 
-export type EventType =
-    | "push"
-    | "pull_request"
-    | "issues"
-    | "issue_comment"
-    | "fork"
-    | "star"
-    | "default";
-// Update types/type.ts
-export interface Repository {
-    name?: string;
-    full_name?: string;
-    html_url?: string;
-    description?: string;
-    owner?: { login: string; avatar_url?: string };
-    fork?: boolean;
+
+export interface User {
+    name: string;
+    email?: string;
+    login: string;
 }
 
-export interface Pusher {
-    name?: string;
-}
-
-export interface PullRequest {
-    title?: string;
+export interface ReactionCounts {
+    url: string;
+    total_count: number;
+    "+1": number;
+    "-1": number;
+    laugh: number;
+    hooray: number;
+    confused: number;
+    heart: number;
+    rocket: number;
+    eyes: number;
 }
 
 export interface Issue {
-    title?: string;
+    url: string;
+    repository_url: string;
+    labels_url: string;
+    comments_url: string;
+    events_url: string;
+    html_url: string;
+    id: number;
+    number: number;
+    title: string;
+    user: User;
+    labels: string[];
+    state: string;
+    reactions: ReactionCounts;
+    timeline_url: string;
+    performed_via_github_app?: string | null;
+    state_reason?: string | null;
+}
+
+export interface Repository {
+    id: number;
+    name: string;
+    full_name: string;
+    owner: User;
+    html_url: string;
+    description?: string;
+    forks_url: string;
+    issues_url: string;
+    labels_url: string;
+    releases_url: string;
+    created_at: string;
+    updated_at: string;
+    pushed_at: string;
+}
+
+export interface PullRequest {
+    title: string;
 }
 
 export interface Payload {
-    timestamp?: string;
-    repository?: Repository;
-    pusher?: Pusher;
+    action?: string;
+    repository: Repository;
+    pusher?: User;
     pull_request?: PullRequest;
     issue?: Issue;
+    commits?: Commit[];
+    timestamp: string;
+    sender?: User;
+    head_commit?: { timestamp?: string };
+
 }
 
 export interface Event {
     id: string;
     eventType: string;
-    payload?: Payload;
+    payload: Payload;
+}
+
+export interface Commit {
+    id: string;
+    tree_id: string;
+    distinct: boolean;
+    message: string;
+    timestamp: string;
+    url: string;
+    author: User;
+    committer: User;
+    added: string[];
+    removed: string[];
+    modified: string[];
 }
