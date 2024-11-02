@@ -45,14 +45,20 @@ export default function PhotosCardsGroup1() {
                     const Component = mdxFiles[card.slug];
                     return (
                         <div key={ card.slug }
-                             className="animated-border p-6 max-w-screen-xl w-full border border-gray-200 bg-white rounded-xl shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg ">
+                             className="animated-border p-6 max-w-screen-xl w-full border border-gray-200 bg-white rounded-xl shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg" >
                             <h2 className="text-xl font-semibold text-gray-800 mb-3 hover:text-opacity-90">{ card.title }</h2>
                             <Component/>
                         </div>
                     );
                 }) }
             </div>
+            <div className=" inset-0 bg-black opacity-25  rounded-xl">
+                <h1 className="prose-2xl text-5xl md:text-6xl lg:text-9xl text-blue-100 lg:m-12 mt-24 bg-cove bg-no-repeat bg-blend-multiply bg-clip-text">
+                    Projects
+                </h1>
+            </div>
             <Outlet/>
+
         </div>
     );
 }
