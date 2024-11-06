@@ -13,14 +13,11 @@ export async function getAllEvents(): Promise<Event[]> {
        return events as unknown as  Event[];
 }
 
-export async function getEventById(eventId: string): Promise<Event> {
-    const { db } = await connectDB();
-    const events = await db.collection("events").find({}).toArray()
+export async function getEventById(eventId: string): Promise<Event | null> {
+         const { db } = await connectDB();
+         const event = await db.collection("events").findOne({ id: eventId });
+         return event as unknown as Event;
 
-    const event = events.find((e) => e.id === eventId);
-
-    return event as unknown as Event;
-}
 export async function deleteEventById(eventId: string): Promise<boolean> {
     const { db } = await connectDB();
     const result = await db.collection("events").deleteOne({ id: eventId });
