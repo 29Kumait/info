@@ -121,7 +121,6 @@ export default function EventsByType() {
   );
 }
 
-
 function normalizeEventType(eventType: string): string {
   return eventType.toLowerCase().replace(/\s+/g, '_');
 }
