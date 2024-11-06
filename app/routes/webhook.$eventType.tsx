@@ -32,8 +32,15 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     (event) => normalizeEventType(event.eventType) === normalizedEventType
   );
 
+  // Ensure no duplicate "ISSUES" cards are fetched and displayed
+  const uniqueFilteredEvents = filteredEvents.filter(
+    (event, index, self) =>
+      event.eventType !== 'issues' ||
+      index === self.findIndex((e) => e.id === event.id)
+  );
+
   return json({
-    events: filteredEvents,
+    events: uniqueFilteredEvents,
     eventTypes: eventTypesArray,
     currentType: params.eventType,
   });
