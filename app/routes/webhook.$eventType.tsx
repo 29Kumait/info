@@ -17,21 +17,16 @@ interface ActionData {
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.eventType, 'Expected params.eventType');
 
-
   const normalizedEventType = normalizeEventType(params.eventType);
-
 
   const events = await getAllEvents();
 
-
   const eventTypesSet = new Set(events.map((e) => e.eventType));
-
 
   const eventTypesArray = Array.from(eventTypesSet).map((eventType) => ({
     original: eventType,
     normalized: normalizeEventType(eventType),
   }));
-
 
   const filteredEvents = events.filter(
     (event) => normalizeEventType(event.eventType) === normalizedEventType
@@ -124,7 +119,6 @@ export default function EventsByType() {
     </div>
   );
 }
-
 
 function normalizeEventType(eventType: string): string {
   return eventType.trim().toLowerCase().replace(/\s+/g, '_');
