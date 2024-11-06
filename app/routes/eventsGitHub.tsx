@@ -10,16 +10,17 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const url = new URL(request.url);
     if (firstEventType && !url.pathname.includes(firstEventType)) {
-        return redirect(`/webhook/${firstEventType}`);
+        return redirect(`/eventsGitHub/${firstEventType}`);
     }
 
     return json({ eventTypes });
 };
 
-export default function Webhook() {
+export default function EventsGitHub() {
     return (
         <>
-            <div className="flex flex-col items-center justify-center min-h-screen py-2">
+        <div>
+            {/*<div className="flex flex-col items-center justify-center min-h-screen py-2">*/}
                 <h1 className="text-3xl font-bold text-center mb-10 text-gray-800">
                     Repository Github Webhook Events
                 </h1>

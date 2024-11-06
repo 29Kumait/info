@@ -11,6 +11,6 @@ export const meta: MetaFunction = () => {
 
 
 export const loader: LoaderFunction = async () => {
-  return redirect(`webhook`);
+  return redirect(`photos/cards/apps`);
 };
 
