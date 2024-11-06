@@ -1,6 +1,6 @@
 import type {ActionFunctionArgs , LoaderFunctionArgs} from '@remix-run/node';
 import {json} from '@remix-run/node';
-import {NavLink , useFetcher , useLoaderData} from '@remix-run/react';
+import {useFetcher , useLoaderData} from '@remix-run/react';
 import invariant from 'tiny-invariant';
 import {getAllEvents , getEventById} from '~/db/eventStorage.server';
 import EventCard from '~/ui/EventCard';
@@ -8,6 +8,7 @@ import Masonry from 'react-masonry-css';
 import Modal from '~/ui/Modal';
 import EventContent from '~/ui/EventContent';
 import type {Event} from '~/types/type';
+import Tabs from "~/ui/Tabs";
 
 interface ActionData {
     event?: Event | null;
@@ -63,25 +64,7 @@ export default function EventsByType() {
             </h1>
 
             {/* Navigation Tabs */}
-            <div className="flex space-x-4 mb-8 border-b border-gray-200">
-                {eventTypes.map((eventType) => (
-                    <NavLink
-                        key={eventType}
-                        prefetch="intent"
-                        to={`/webhook/${eventType}`}
-                        preventScrollReset
-                        className={({ isActive }) =>
-                            `pb-2 text-lg font-medium ${
-                                isActive
-                                    ? 'border-b-2 border-indigo-600 text-indigo-600'
-                                    : 'text-gray-600 hover:text-indigo-600'
-                            }`
-                        }
-                    >
-                        {eventType.replace(/_/g, ' ').toUpperCase()}
-                    </NavLink>
-                ))}
-            </div>
+<Tabs eventTypes={eventTypes}  />
 
             {/* Event Cards */}
             <Masonry
