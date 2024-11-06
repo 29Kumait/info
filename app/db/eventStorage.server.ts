@@ -13,7 +13,7 @@ export async function getAllEvents(): Promise<Event[]> {
        return events as unknown as  Event[];
 }
 
-export async function getEventById(eventId: string): Promise<Event | undefined> {
+export async function getEventById(eventId: string): Promise<Event> {
     const { db } = await connectDB();
     const events = await db.collection("events").find({}).toArray()
 
