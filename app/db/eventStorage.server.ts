@@ -13,6 +13,14 @@ export async function getAllEvents(): Promise<Event[]> {
        return events as unknown as  Event[];
 }
 
+export async function getEventById(eventId: string): Promise<Event | undefined> {
+    const { db } = await connectDB();
+    const events = await db.collection("events").find({}).toArray()
+
+    const event = events.find((e) => e.id === eventId);
+
+    return event as unknown as Event;
+}
 export async function deleteEventById(eventId: string): Promise<boolean> {
     const { db } = await connectDB();
     const result = await db.collection("events").deleteOne({ id: eventId });
