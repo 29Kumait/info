@@ -1,39 +1,39 @@
-import {ActionFunctionArgs , json} from "@remix-run/node";
-import {insertEvent} from "~/db/eventStorage.server";
-import {sanitizeEventData} from "~/utils/sanitizeData";
-import type {Event} from "~/types/type";
+import { ActionFunctionArgs, json } from "@remix-run/node";
+import { insertEvent } from "~/db/eventStorage.server";
+import { sanitizeEventData } from "~/utils/sanitizeData";
+import type { Event } from "~/types/type";
+
+export const loader = async () => {
+    return json({ message: "Method not allowed" }, { status: 405 });
+};
 
 export const action = async ({
-                                 request,
-                             }: ActionFunctionArgs) => {
+    request,
+}: ActionFunctionArgs) => {
     if (request.method !== "POST") {
         return json({ message: "Method not allowed" }, 405);
     }
-
     const crypto = await import("crypto");
-    const payloadText = await request.text();
-    const eventType = request.headers.get("X-GitHub-Event") || "unknown_event";
-    const deliveryId = request.headers.get("X-GitHub-Delivery") || "unknown";
-
-    const webhookSecret = process.env.WEBHOOK_SECRET;
-
-    if (!webhookSecret) {
-        throw new Response("WEBHOOK_SECRET environment variable is not set.", {
-            status: 500,
-        });
+    const deliveryId = request.headers.get("X-GitHub-Delivery");
+    const eventType = request.headers.get("X-GitHub-Event");
+    if (!deliveryId || !eventType) {
+        return json({ message: "Invalid headers" }, 400);
     }
-    const signature = request.headers.get(
-        "X-Hub-Signature-256"
-    );
+
+    const payload = await request.json();
+
+    const signature = request.headers.get("X-Hub-Signature-256");
+    const webhookSecret = process.env.WEBHOOK_SECRET;
+    if (!webhookSecret) {
+        throw new Error("WEBHOOK_SECRET is not defined");
+    }
     const generatedSignature = `sha256=${crypto
-        .createHmac("sha256",webhookSecret)
-        .update(JSON.stringify(payloadText))
+        .createHmac("sha256", webhookSecret)
+        .update(JSON.stringify(payload))
         .digest("hex")}`;
     if (signature !== generatedSignature) {
         return json({ message: "Signature mismatch" }, 401);
     }
-
-    const payload = await request.json();
 
     const sanitizedPayload = sanitizeEventData(payload);
 
@@ -54,6 +54,6 @@ export const action = async ({
     const success = await insertEvent(event);
 
     return success
-    ?  json({ success: true }, 200)
+        ? json({ success: true }, 200)
         : json({ message: "Failed to save event" }, { status: 500 });
 }
