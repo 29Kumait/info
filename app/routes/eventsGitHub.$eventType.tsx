@@ -1,14 +1,11 @@
-import type {ActionFunctionArgs , LoaderFunctionArgs} from '@remix-run/node';
-import {json} from '@remix-run/node';
-import {useFetcher , useLoaderData} from '@remix-run/react';
+import { json, LoaderFunctionArgs, ActionFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import invariant from 'tiny-invariant';
-import {getAllEvents , getEventById} from '~/db/eventStorage.server';
-import EventCard from '~/ui/EventCard';
 import Masonry from 'react-masonry-css';
-import Modal from '~/ui/Modal';
-import EventContent from '~/ui/EventContent';
-import type {Event} from '~/types/type';
-import Tabs from "~/ui/Tabs";
+import { getAllEvents, getEventById } from '~/db/eventStorage.server';
+import Tabs from '~/ui/Tabs';
+import EventCard from '~/ui/EventCard';
+import type { Event } from '~/types/type';
 
 interface ActionData {
     event?: Event | null;
@@ -19,7 +16,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     invariant(params.eventType, 'Expected params.eventType');
     const events = await getAllEvents();
     const eventTypesArray = Array.from(new Set(events.map((e) => e.eventType)));
-    const filteredEvents = events.filter((event) => event.eventType === params.eventType);
+    const filteredEvents = events.filter(
+        (event) => event.eventType === params.eventType
+    );
 
     return json({
         events: filteredEvents,
@@ -28,7 +27,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action: ActionFunction = async ({ request }) => {
     const formData = await request.formData();
     const closeModal = formData.get('closeModal');
     const eventId = formData.get('eventId');
@@ -47,15 +46,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function EventsByType() {
     const { events, eventTypes, currentType } = useLoaderData<typeof loader>();
-    const fetcher = useFetcher<ActionData>();
-
-    const isModalOpen = !!fetcher.data?.event;
-
-    const handleCloseModal = () => {
-        const formData = new FormData();
-        formData.append('closeModal', 'true');
-        fetcher.submit(formData, { method: 'post' });
-    };
 
     return (
         <div className="container mx-auto p-8">
@@ -64,7 +54,7 @@ export default function EventsByType() {
             </h1>
 
             {/* Navigation Tabs */}
-<Tabs eventTypes={eventTypes}  />
+            {/* <Tabs eventTypes={eventTypes} /> */}
 
             {/* Event Cards */}
             <Masonry
@@ -77,16 +67,9 @@ export default function EventsByType() {
                 columnClassName="masonry-grid_column space-y-4"
             >
                 {events.map((event) => (
-                    <EventCard key={event.id} event={event} fetcher={fetcher} />
+                    <EventCard key={event.id} event={event} />
                 ))}
             </Masonry>
-
-            {/* Event Modal */}
-            {isModalOpen && fetcher.data?.event && (
-                <Modal isOpen={true} onClose={handleCloseModal}>
-                    <EventContent event={fetcher.data.event} />
-                </Modal>
-            )}
         </div>
     );
 }
