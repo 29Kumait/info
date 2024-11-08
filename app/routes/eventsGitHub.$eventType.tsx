@@ -54,7 +54,7 @@ export default function EventsByType() {
             </h1>
 
             {/* Navigation Tabs */}
-            <Tabs eventTypes={eventTypes} />
+            {/* <Tabs eventTypes={eventTypes} /> */}
 
             {/* Event Cards */}
             <Masonry
