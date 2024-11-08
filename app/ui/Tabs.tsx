@@ -6,7 +6,7 @@ interface TabsProps {
 
 export default function Tabs({ eventTypes }: TabsProps) {
     return (
-        <nav className="flex space-x-4 mb-8 border-b border-gray-200">
+        <nav className="flex space-x-4 mb-8 border-b border-gray-200 justify-center">
             {eventTypes.map((eventType) => (
                 <NavLink
                     key={eventType}
@@ -24,7 +24,6 @@ export default function Tabs({ eventTypes }: TabsProps) {
                 </NavLink>
             ))}
         </nav>
-
     );
 }
 

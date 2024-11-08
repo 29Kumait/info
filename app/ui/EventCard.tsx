@@ -17,6 +17,11 @@ interface EventCardProps {
     className?: string;
 }
 
+interface ActionData {
+    event?: Event | null;
+    error?: string;
+}
+
 function getEventTypeStyle(eventType: string): string {
     const baseStyle = "border border-transparent rounded-2xl p-6 backdrop-blur-sm bg-white/30 shadow-md";
     const typeStyles: Record<string, string> = {
@@ -45,7 +50,7 @@ function getEventTypeIcon(eventType: string) {
 }
 
 export default function EventCard({ event, className = '' }: EventCardProps) {
-    const fetcher = useFetcher();
+    const fetcher = useFetcher<ActionData>();
 
     const eventStyle = getEventTypeStyle(event.eventType);
     const eventIcon = getEventTypeIcon(event.eventType);

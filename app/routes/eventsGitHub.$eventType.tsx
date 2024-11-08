@@ -5,7 +5,12 @@ import Masonry from 'react-masonry-css';
 import { getAllEvents, getEventById } from '~/db/eventStorage.server';
 import Tabs from '~/ui/Tabs';
 import EventCard from '~/ui/EventCard';
+import type { Event } from '~/types/type';
 
+interface ActionData {
+    event?: Event | null;
+    error?: string;
+}
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     invariant(params.eventType, 'Expected params.eventType');
@@ -28,15 +33,15 @@ export const action: ActionFunction = async ({ request }) => {
     const eventId = formData.get('eventId');
 
     if (closeModal === 'true') {
-        return json({ event: null });
+        return json<ActionData>({ event: null });
     }
 
     if (!eventId || typeof eventId !== 'string') {
-        return json({ error: 'Invalid event ID' }, { status: 400 });
+        return json<ActionData>({ error: 'Invalid event ID' }, { status: 400 });
     }
 
     const event = await getEventById(eventId);
-    return json({ event });
+    return json<ActionData>({ event });
 };
 
 export default function EventsByType() {
