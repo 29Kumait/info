@@ -3,7 +3,6 @@ import { useLoaderData } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 import Masonry from 'react-masonry-css';
 import { getAllEvents, getEventById } from '~/db/eventStorage.server';
-import Tabs from '~/ui/Tabs';
 import EventCard from '~/ui/EventCard';
 import type { Event } from '~/types/type';
 
@@ -45,7 +44,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function EventsByType() {
-    const { events, eventTypes, currentType } = useLoaderData<typeof loader>();
+    const { events, currentType } = useLoaderData<typeof loader>();
 
     return (
         <div className="container mx-auto p-8">
