@@ -51,9 +51,6 @@ export default function AppData() {
     const [searchParams] = useSearchParams();
     const appId = searchParams.get("appId");
     const activeApp = apps.find((app) => app.id === appId) || apps[0];
-    const navigation = useNavigation();
-
-    const isNavLinkPending = navigation.state === "loading";
 
     return (
         <div
