@@ -13,7 +13,7 @@ export default function EventsIndex() {
     const { eventTypes } = useLoaderData<typeof loader>();
 
     return (
-        <div className="container mx-auto p-8">
+        <div className="container mx-auto p-8 bg-zinc-50">
             <h1 className=" mt-10 text-3xl font-bold text-center mb-10 text-gray-800">
                 Repository Github Webhook Events
             </h1>

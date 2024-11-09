@@ -1,6 +1,6 @@
-import {MetaFunction , redirect} from "@remix-run/react";
+import { MetaFunction, redirect } from "@remix-run/react";
 
-import type {LoaderFunction} from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,6 +11,6 @@ export const meta: MetaFunction = () => {
 
 
 export const loader: LoaderFunction = async () => {
-  return redirect(`photos/cards/apps`);
+  return redirect(`photos/cards/apps/ticker`);
 };
 

@@ -1,4 +1,4 @@
-import type {Config} from "tailwindcss";
+import type { Config } from "tailwindcss";
 import typography from '@tailwindcss/typography';
 import ratio from "@tailwindcss/aspect-ratio";
 
@@ -84,11 +84,23 @@ export default {
                 marquee: "marquee 20s linear infinite",
                 fadeIn: "fadeIn 0.5s forwards",
                 borderGlow: 'borderGlow 5s linear infinite',
-                borderGlowOnce: 'borderGlowOnce 7s linear forwards' ,
+                borderGlowOnce: 'borderGlowOnce 7s linear forwards',
 
             },
         },
     },
     variants: {},
-    plugins: [typography, ratio],
+    plugins: [typography, ratio,
+        function ({ addUtilities }: { addUtilities: (utilities: Record<string, any>) => void }) {
+            addUtilities({
+                '.hidden-scrollbar::-webkit-scrollbar': {
+                    display: 'none',
+                },
+                '.hidden-scrollbar': {
+                    '-ms-overflow-style': 'none',
+                    'scrollbar-width': 'none',
+                },
+            });
+        }
+    ],
 } satisfies Config;

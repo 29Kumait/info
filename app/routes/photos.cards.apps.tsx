@@ -1,13 +1,30 @@
+
 import { json } from "@remix-run/node";
 import { connectDB } from "~/db/mongoDB.server";
-import { NavLink, Outlet, useLoaderData, useNavigation, useSearchParams, } from "@remix-run/react";
+import {
+    useLoaderData,
+    NavLink,
+    useSearchParams,
+    Outlet,
+    useNavigation,
+} from "@remix-run/react";
 import invariant from "tiny-invariant";
+export interface Feature {
+    [key: string]: string;
+}
 
-interface App {
+export interface App {
     id: string;
     title: string;
     deployment: string;
     github: string;
+    overview: string;
+    description: string;
+    features?: Feature[];
+    technologiesUsed?: string[];
+    installation?: string;
+    usage?: string;
+
 }
 
 interface LoaderData {
@@ -24,33 +41,49 @@ export const loader = async () => {
     return json({ apps: data.apps });
 };
 
-function AppData() {
+export default function AppData() {
     const { apps } = useLoaderData<LoaderData>();
     const [searchParams] = useSearchParams();
     const appId = searchParams.get("appId");
     const activeApp = apps.find((app) => app.id === appId) || apps[0];
     const navigation = useNavigation();
+
     const isNavLinkPending = navigation.state === "loading";
 
     return (
         <div
-            className="mt-12 bg-cover animated-border p-6 max-w-screen-xl w-full border border-gray-200 bg-white rounded-xl shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg"
+            className="mt-12 bg-cover bg-center"
             style={{
-                backgroundImage: "url('/bg.jpg')",
+                backgroundImage: "url('/GlassBackground.jpg')",
                 boxShadow:
                     "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
             }}
         >
-            <h2
-                className="prose-xl md:text-3xl lg:text-5xl text-blue-100 lg:m-3 mt-12 animated-border p-6 max-w-screen-xl w-full border border-gray-200 rounded-xl shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg"
-                style={{
-                    boxShadow:
-                        "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
-                }}
-            >
-                {activeApp.title}
-            </h2>
-            <div className="max-w-5xl mx-auto p-8 m-5 relative">
+
+            {!isNavLinkPending && (
+                <nav className="justify-between border-b border-[#50e5ff] flex mb-8 overflow-x-auto relative z-10">
+                    {apps.map((app) => {
+                        const isActive = searchParams.get("appId") === app.id;
+
+                        return (
+                            <NavLink
+                                key={app.id}
+                                prefetch="viewport"
+                                to={`?appId=${app.id}`}
+                                preventScrollReset
+                                className={`whitespace-nowrap mt-3 mr-2 md:mr-4 px-4 py-2 md:px-6 md:py-3 ${isActive
+                                    ? "border-b-4 border-[#7ab6ff] text-blue-100"
+                                    : "text-[#6382b3] hover:text-[#50e5ff]"
+                                    }`}
+                            >
+                                {app.github}
+                            </NavLink>
+                        );
+                    })}
+                </nav>
+            )}
+
+            <div className="max-w-5xl mx-auto p-8 m-5 relative  mt-24">
                 <div className="absolute inset-0 rounded-xl overflow-hidden">
                     <div
                         className={`w-full h-full rounded-xl ${isNavLinkPending ? "animate-borderGlowOnce" : ""
@@ -63,48 +96,100 @@ function AppData() {
                     ></div>
                 </div>
 
-                <div
-                    key={activeApp.id}
-                    className="relative w-full overflow-hidden rounded-lg bg-gray-800 aspect-w-16 aspect-h-9"
-                >
-                    <iframe
-                        src={activeApp.deployment}
-                        title={activeApp.title}
-                        className="absolute top-0 left-0 w-full h-full rounded-lg"
-                        allow="autoplay; fullscreen"
-                        allowFullScreen
-                        loading="lazy"
-                    />
-                </div>
-            </div>
+                <div className="relative z-10 p-8 rounded-xl shadow-lg bg-gray-900/60">
 
-            <div className="relative z-10 p-8 rounded-xl shadow-lg bg-gray-900/60">
-                <nav className="justify-between border-b border-[#FF507A] flex mb-8 overflow-x-auto">
-                    {apps.map((app) => {
-                        const isActive = app.id === appId;
-                        return (
-                            <NavLink
-                                key={app.id}
-                                prefetch="intent"
-                                to={`?appId=${app.id}`}
-                                preventScrollReset
-                                className={({ isPending }) =>
-                                    `whitespace-nowrap mr-2 md:mr-4 px-4 py-2 md:px-6 md:py-3 ${isActive
-                                        ? "border-b-4 border-[#FF7A9A] text-[#FF507A]"
-                                        : "text-[#BEE0DB] hover:text-[#FF7A9A]"
-                                    } ${isPending ? "link-pending" : ""}`
-                                }
+
+                    <hgroup
+                        className="text-center prose-xl md:text-3xl lg:text-5xl text-blue-100  mb-28 mt-24 animated-border p-6 max-w-screen-xl w-full border border-gray-200 rounded-xl shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg"
+                        style={{
+                            boxShadow:
+                                "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
+                        }}
+                    >
+                        {activeApp.title}
+                        {activeApp && (
+                            <div
+                                key={activeApp.id}
+                                className="relative w-full overflow-hidden rounded-lg bg-gray-800 aspect-w-16 aspect-h-9 mb-28"
                             >
-                                {app.github}
-                            </NavLink>
-                        );
-                    })}
-                </nav>
+                                <iframe
+                                    src={activeApp.deployment}
+                                    title={activeApp.title}
+                                    className="absolute top-0 left-0 w-full h-full rounded-lg"
+                                    allow="autoplay; fullscreen"
+                                    allowFullScreen
+                                    loading="lazy"
+                                />
+                            </div>
+                        )}
+                    </hgroup>
+
+                    <hgroup
+                        className="text-center text-xl md:text-3xl lg:text-5xl text-blue-100 mb-16 mt-12 p-4 max-w-screen-lg w-full border border-gray-200 rounded-lg shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4"
+                        style={{
+                            boxShadow:
+                                "0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(0, 0, 255, 0.4)",
+                        }}
+                    >
+                        <div>{activeApp.overview}</div>
+                        {activeApp.features && activeApp.features.map((feature, index) => {
+                            const [title, description] = Object.entries(feature)[0];
+                            return (
+                                <div key={index} className="bg-gray-700 p-4 rounded">
+                                    <h4 className="text-lg font-semibold">{title}</h4>
+                                    <p className="text-sm">{description}</p>
+                                </div>
+                            );
+                        })}
+                    </hgroup>
+
+                </div>
+                <hgroup
+                    className="text-center text-xl md:text-3xl lg:text-5xl text-blue-100 mb-16 mt-12 p-4 max-w-screen-lg w-full border border-gray-200 rounded-lg shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg overflow-hidden"
+                    style={{
+                        boxShadow:
+                            "0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(0, 0, 255, 0.4)",
+                    }}
+                >
+                    <div className="mb-8">{activeApp.overview}</div>
+                    {activeApp.features && activeApp.features.length > 0 ? (
+                        <div className="animate-marquee flex space-x-8">
+                            {activeApp.features.map((feature, index) => {
+                                const [title] = Object.entries(feature)[0];
+                                return (
+                                    <div
+                                        key={index}
+                                        className="bg-gray-700 p-4 rounded-lg shadow-inner flex-shrink-0 w-64 sm:w-72 md:w-80"
+                                    >
+                                        <h4 className="text-lg font-semibold break-words">
+                                            {title}
+                                        </h4>
+                                    </div>
+                                );
+                            })}
+                            {activeApp.features.map((feature, index) => {
+                                const [title] = Object.entries(feature)[0];
+                                return (
+                                    <div
+                                        key={`dup-${index}`}
+                                        className="bg-gray-700 p-4 rounded-lg shadow-inner flex-shrink-0 w-64 sm:w-72 md:w-80"
+                                    >
+                                        <h4 className="text-lg font-semibold break-words">
+                                            {title}
+                                        </h4>                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="text-gray-400 italic">
+                            Currently, there are no features to display for this application.
+                        </div>
+                    )}
+                </hgroup>
             </div>
 
             <Outlet />
+
         </div>
     );
 }
-
-export default AppData;
