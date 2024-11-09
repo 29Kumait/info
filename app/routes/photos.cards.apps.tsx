@@ -5,7 +5,7 @@ import {
     NavLink,
     Outlet,
     useNavigation,
-    useSearchParams
+    useSearchParams,
 } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
@@ -42,6 +42,12 @@ export const loader = async () => {
 
 export default function AppData() {
     const { apps } = useLoaderData<LoaderData>();
+    console.log("Client Data:", apps); // Client-side log
+
+    if (!apps || apps.length === 0) {
+        return <div>No applications available.</div>;
+    }
+
     const [searchParams] = useSearchParams();
     const appId = searchParams.get("appId");
     const activeApp = apps.find((app) => app.id === appId) || apps[0];
@@ -133,8 +139,47 @@ export default function AppData() {
                     </div>
                 </div>
 
-                {/* Removed the duplicated overview and features section */}
-
+                <div
+                    className="text-center text-xl md:text-3xl lg:text-5xl text-blue-100 mb-16 mt-12 p-4 max-w-screen-lg w-full border border-gray-200 rounded-lg shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg overflow-hidden"
+                    style={{
+                        boxShadow:
+                            "0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(0, 0, 255, 0.4)",
+                    }}   >
+                    <div className="mb-8">{activeApp.overview}</div>
+                    {activeApp.features && activeApp.features.length > 0 ? (
+                        <div className="animate-marquee flex space-x-8">
+                            {activeApp.features.map((feature, index) => {
+                                const [title] = Object.entries(feature)[0];
+                                return (
+                                    <div
+                                        key={index}
+                                        className="bg-gray-700 p-4 rounded-lg shadow-inner flex-shrink-0 w-64 sm:w-72 md:w-80"
+                                    >
+                                        <h4 className="text-lg font-semibold break-words">
+                                            {title}
+                                        </h4>
+                                    </div>
+                                );
+                            })}
+                            {activeApp.features.map((feature, index) => {
+                                const [title] = Object.entries(feature)[0];
+                                return (
+                                    <div
+                                        key={`dup-${index}`}
+                                        className="bg-gray-700 p-4 rounded-lg shadow-inner flex-shrink-0 w-64 sm:w-72 md:w-80"
+                                    >
+                                        <h4 className="text-lg font-semibold break-words">
+                                            {title}
+                                        </h4>                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="text-gray-400 italic">
+                            Currently, there are no features to display for this application.
+                        </div>
+                    )}
+                </div>
                 <Outlet />
             </div>
         </div>

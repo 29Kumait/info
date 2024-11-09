@@ -1,36 +1,34 @@
 import type { Config } from "tailwindcss";
-import typography from '@tailwindcss/typography';
+import typography from "@tailwindcss/typography";
 import ratio from "@tailwindcss/aspect-ratio";
 
 export default {
     content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx,md,mdx}"],
-    darkMode: 'class',
+    darkMode: "class",
 
     theme: {
         extend: {
             transitionProperty: {
-                'opacity': 'opacity',
+                opacity: "opacity",
             },
             boxShadow: {
-                'custom-ring': '0 0 10px rgba(0, 0, 255, 0.5)',
-                'mirror': '0 8px 32px rgba(0, 0, 0, 0.25)',
-
+                "custom-ring": "0 0 10px rgba(0, 0, 255, 0.5)",
+                mirror: "0 8px 32px rgba(0, 0, 0, 0.25)",
             },
-
             dropShadow: {
-                'bright-glow': '0 0 4em rgba(255, 255, 255, 0.9)',
-                'blue-glow': '0 0 4em rgba(0, 123, 255, 0.9)',
+                "bright-glow": "0 0 4em rgba(255, 255, 255, 0.9)",
+                "blue-glow": "0 0 4em rgba(0, 123, 255, 0.9)",
             },
             colors: {
-                focusOutline: '#1E90FF',
-                mirrorEffect: '#9ca3af',
-                cardBgLight: '#F9FAFB',
-                cardBgDark: '#1F2937',
-                controlBorderColorSelected: '#0d1117',
-                menuBgColorActive: '#151b23',
-                outlineFocusOffset: '-0.125rem',
-                outlineFocusWidth: '0.125rem',
-                color: '#C8FF80',
+                focusOutline: "#1E90FF",
+                mirrorEffect: "#9ca3af",
+                cardBgLight: "#F9FAFB",
+                cardBgDark: "#1F2937",
+                controlBorderColorSelected: "#0d1117",
+                menuBgColorActive: "#151b23",
+                outlineFocusOffset: "-0.125rem",
+                outlineFocusWidth: "0.125rem",
+                color: "#C8FF80",
                 "dark-blue-black-01": "rgba(4, 9, 20, 0.9)",
                 "dark-blue-black-02": "rgba(12, 27, 52, 0.8)",
                 "dark-blue-black-03": "rgba(7, 19, 38, 0.7)",
@@ -40,7 +38,6 @@ export default {
                 "bluish-black-01": "rgba(10, 10, 20, 0.9)",
                 "bluish-black-02": "rgba(10, 20, 30, 0.8)",
                 "bluish-black-03": "rgba(20, 30, 40, 0.7)",
-
             },
             keyframes: {
                 float: {
@@ -60,8 +57,8 @@ export default {
                     },
                 },
                 fadeIn: {
-                    "0%": { opacity: '0', transform: "translateY(20px)" },
-                    "100%": { opacity: '1', transform: "translateY(0)" },
+                    "0%": { opacity: "0", transform: "translateY(20px)" },
+                    "100%": { opacity: "1", transform: "translateY(0)" },
                 },
                 fadeOut: {
                     "0%": { opacity: "1" },
@@ -72,10 +69,9 @@ export default {
                     "100%": { transform: "translateX(-50%)" },
                 },
                 borderGlowOnce: {
-                    '0%': { backgroundPosition: '0% 50%' },
-                    '100%': { backgroundPosition: '200% 50%' },
+                    "0%": { backgroundPosition: "0% 50%" },
+                    "100%": { backgroundPosition: "200% 50%" },
                 },
-
             },
             animation: {
                 float: "float 3s ease-in-out infinite",
@@ -83,24 +79,29 @@ export default {
                 fadeOutDelayed: "fadeOut 2s ease-in-out forwards 4s",
                 marquee: "marquee 20s linear infinite",
                 fadeIn: "fadeIn 0.5s forwards",
-                borderGlow: 'borderGlow 5s linear infinite',
-                borderGlowOnce: 'borderGlowOnce 7s linear forwards',
-
+                borderGlow: "borderGlow 5s linear infinite",
+                borderGlowOnce: "borderGlowOnce 7s linear forwards",
             },
         },
     },
     variants: {},
-    plugins: [typography, ratio,
-        function ({ addUtilities }: { addUtilities: (utilities: Record<string, any>) => void }) {
+    plugins: [
+        typography,
+        ratio,
+        function ({
+            addUtilities,
+        }: {
+            addUtilities: (utilities: Record<string, any>) => void;
+        }) {
             addUtilities({
-                '.hidden-scrollbar::-webkit-scrollbar': {
-                    display: 'none',
+                ".hidden-scrollbar::-webkit-scrollbar": {
+                    display: "none",
                 },
-                '.hidden-scrollbar': {
-                    '-ms-overflow-style': 'none',
-                    'scrollbar-width': 'none',
+                ".hidden-scrollbar": {
+                    "-ms-overflow-style": "none",
+                    "scrollbar-width": "none",
                 },
             });
-        }
+        },
     ],
 } satisfies Config;
