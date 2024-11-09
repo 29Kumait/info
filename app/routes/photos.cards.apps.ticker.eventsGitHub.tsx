@@ -17,10 +17,8 @@ export default function EventsIndex() {
             <h1 className=" mt-10 text-3xl font-bold text-center mb-10 text-gray-800">
                 Repository Github Webhook Events
             </h1>
-            {/* Navigation Tabs */}
             <Tabs eventTypes={eventTypes} />
             <Outlet />
         </div>
     );
 }
-// export { Outlet as default } from "@remix-run/react";

@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Outlet } from "@remix-run/react";
 import { CARDS } from "~/data";
 import type { Card } from "~/types/type";
 import invariant from "tiny-invariant";
@@ -35,7 +35,7 @@ export default function Ticker() {
                     ))}
                 </div>
             </div>
-            {/* <Outlet /> */}
+            <Outlet />
         </div>
     );
 }
