@@ -1,12 +1,10 @@
-import { json } from "@remix-run/node";
-import { connectDB } from "~/db/mongoDB.server";
 import {
+    useSearchParams,
     useLoaderData,
     NavLink,
     Outlet,
-    useNavigation,
-    useSearchParams,
 } from "@remix-run/react";
+import { connectDB } from "~/db/mongoDB.server";
 import invariant from "tiny-invariant";
 
 export interface Feature {
@@ -37,12 +35,11 @@ export const loader = async () => {
     const data = await db.collection("app").findOne<{ apps: App[] }>({});
     invariant(data, "No data found in the database");
 
-    return json({ apps: data.apps });
+    return ({ apps: data.apps });
 };
 
 export default function AppData() {
     const { apps } = useLoaderData<LoaderData>();
-    console.log("Client Data:", apps); // Client-side log
 
     if (!apps || apps.length === 0) {
         return <div>No applications available.</div>;

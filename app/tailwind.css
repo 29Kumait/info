@@ -2,13 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global Styles */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-white dark:bg-gray-950 min-h-screen;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -1,11 +1,11 @@
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { json, LoaderFunction } from "@remix-run/node";
+import {LoaderFunction } from "@remix-run/node";
 import { FC } from "react";
 
-import Education from "./mdx/group1/education.mdx";
-import Experience from "./mdx/group1/experience.mdx";
-import Code from "./mdx/group1/code.mdx";
-import Skills from "./mdx/group1/soft.mdx";
+import Education from "~/ui/mdx/groupOne/education.mdx";
+import Experience from "~/ui/mdx/groupOne/experience.mdx";
+import Code from "~/ui/mdx/groupOne/code.mdx";
+import Skills from "~/ui/mdx/groupOne/soft.mdx";
 
 type Feature = {
     [key: string]: string;
@@ -41,7 +41,7 @@ const cards: Card[] = [
 ];
 
 export const loader: LoaderFunction = async () => {
-    return json({ cards });
+    return ({ cards });
 };
 
 export default function PhotosCardsGroup1() {

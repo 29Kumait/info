@@ -1,6 +1,6 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
-
+import Footer from "~/ui/Footer";
 import "./tailwind.css";
 import ErrorBoundary from "~/routes/errorBoundary";
 
@@ -25,7 +25,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <Footer />
+      <ScrollRestoration />
+    </>
+  );
 }
 
 export { ErrorBoundary }
