@@ -1,5 +1,5 @@
 import { Outlet, useLoaderData } from "@remix-run/react";
-import {LoaderFunction } from "@remix-run/node";
+import { LoaderFunction } from "@remix-run/node";
 import { FC } from "react";
 
 import Education from "~/ui/mdx/groupOne/education.mdx";
@@ -73,7 +73,7 @@ export default function PhotosCardsGroup1() {
             </div>
             <div className="inset-0 bg-black opacity-25 rounded-xl m-28">
                 <h1 className="prose-2xl text-5xl md:text-6xl lg:text-9xl text-blue-100 lg:m-12 mt-24 bg-cover bg-no-repeat bg-blend-multiply bg-clip-text">
-                    {'<Projects Deployment showcase={App.active} />'}
+                    {'<Projects Deployment showcase={app.active} />'}
                 </h1>
             </div>
             <Outlet />
