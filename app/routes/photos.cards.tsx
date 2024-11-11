@@ -3,7 +3,6 @@ import { LoaderFunction } from "@remix-run/node";
 import { FC } from "react";
 
 import Education from "~/ui/mdx/groupOne/education.mdx";
-import Experience from "~/ui/mdx/groupOne/experience.mdx";
 import Code from "~/ui/mdx/groupOne/code.mdx";
 import Skills from "~/ui/mdx/groupOne/soft.mdx";
 
@@ -28,7 +27,6 @@ type Card = {
 
 const mdxFiles: Record<string, FC> = {
     education: Education,
-    experience: Experience,
     code: Code,
     skills: Skills,
 };
@@ -37,7 +35,6 @@ const cards: Card[] = [
     { slug: "education", title: "Education" },
     { slug: "code", title: "Code Skills" },
     { slug: "skills", title: "Soft Skills" },
-    // {slug: "experience", title: "Experience"},
 ];
 
 export const loader: LoaderFunction = async () => {
