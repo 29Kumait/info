@@ -1,15 +1,10 @@
-import { json, LoaderFunctionArgs, ActionFunction } from '@remix-run/node';
+import { LoaderFunctionArgs, ActionFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 import Masonry from 'react-masonry-css';
 import { getAllEvents, getEventById } from '~/db/eventStorage.server';
 import EventCard from '~/ui/EventCard';
-import type { Event } from '~/types/type';
 
-interface ActionData {
-    event?: Event | null;
-    error?: string;
-}
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     invariant(params.eventType, 'Expected params.eventType');
@@ -19,7 +14,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
         (event) => event.eventType === params.eventType
     );
 
-    return json({
+    return ({
         events: filteredEvents,
         eventTypes: eventTypesArray,
         currentType: params.eventType,
@@ -32,15 +27,15 @@ export const action: ActionFunction = async ({ request }) => {
     const eventId = formData.get('eventId');
 
     if (closeModal === 'true') {
-        return json<ActionData>({ event: null });
+        return ({ event: null });
     }
 
     if (!eventId || typeof eventId !== 'string') {
-        return json<ActionData>({ error: 'Invalid event ID' }, { status: 400 });
+        return ({ error: 'Invalid event ID' });
     }
 
     const event = await getEventById(eventId);
-    return json<ActionData>({ event });
+    return ({ event });
 };
 
 export default function EventsByType() {

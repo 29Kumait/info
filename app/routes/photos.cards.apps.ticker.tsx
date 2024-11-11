@@ -1,4 +1,3 @@
-import { json } from "@remix-run/node";
 import { useLoaderData, Outlet } from "@remix-run/react";
 import { CARDS } from "~/data";
 import type { Card } from "~/types/type";
@@ -6,7 +5,7 @@ import invariant from "tiny-invariant";
 
 export const loader = async () => {
     invariant(CARDS.length > 0, "CARDS data must not be empty");
-    return json({ cards: CARDS });
+    return ({ cards: CARDS });
 };
 
 export default function Ticker() {

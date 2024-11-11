@@ -30,5 +30,3 @@ export default function Tabs({ eventTypes }: TabsProps) {
 function normalizeEventType(eventType: string): string {
     return eventType.toLowerCase().replace(/\s+/g, '_');
 }
-
-

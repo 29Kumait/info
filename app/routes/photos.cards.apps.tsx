@@ -1,12 +1,10 @@
-import { json } from "@remix-run/node";
-import { connectDB } from "~/db/mongoDB.server";
 import {
+    useSearchParams,
     useLoaderData,
     NavLink,
     Outlet,
-    useNavigation,
-    useSearchParams,
 } from "@remix-run/react";
+import { connectDB } from "~/db/mongoDB.server";
 import invariant from "tiny-invariant";
 
 export interface Feature {
@@ -37,12 +35,11 @@ export const loader = async () => {
     const data = await db.collection("app").findOne<{ apps: App[] }>({});
     invariant(data, "No data found in the database");
 
-    return json({ apps: data.apps });
+    return ({ apps: data.apps });
 };
 
 export default function AppData() {
     const { apps } = useLoaderData<LoaderData>();
-    console.log("Client Data:", apps); // Client-side log
 
     if (!apps || apps.length === 0) {
         return <div>No applications available.</div>;
@@ -61,23 +58,23 @@ export default function AppData() {
                     "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
             }}
         >
-            <nav className="justify-between border-b border-[#50e5ff] flex mb-8 overflow-x-auto relative z-10">
-                {apps.map((app) => (
+            <nav className="justify-between border-b border-[#50e5ff] flex mb-8 overflow-x-auto relative z-10">                {apps.map((app) => {
+                const isActive = searchParams.get("appId") === app.id;
+                return (
                     <NavLink
                         key={app.id}
-                        prefetch="intent"
+                        prefetch="viewport"
                         to={`?appId=${app.id}`}
                         preventScrollReset
-                        className={({ isActive }) =>
-                            `whitespace-nowrap mt-3 mr-2 md:mr-4 px-4 py-2 md:px-6 md:py-3 ${isActive
-                                ? "border-b-4 border-[#7ab6ff] text-blue-100"
-                                : "text-[#6382b3] hover:text-[#50e5ff]"
-                            }`
-                        }
+                        className={`whitespace-nowrap mr-2 md:mr-4 px-4 py-2 md:px-6 md:py-3 ${isActive
+                            ? "border-b-4 border-[#7ab6ff] text-blue-100"
+                            : "text-[#6382b3] hover:text-[#50e5ff]"
+                            }`}
                     >
                         {app.github}
                     </NavLink>
-                ))}
+                );
+            })}
             </nav>
 
             <div className="max-w-5xl mx-auto p-8 m-5 relative mt-24">
@@ -177,8 +174,8 @@ export default function AppData() {
                         </div>
                     )}
                 </div>
-                <Outlet />
             </div>
+            <Outlet />
         </div>
     );
 }

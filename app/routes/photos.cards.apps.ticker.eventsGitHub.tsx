@@ -1,4 +1,3 @@
-import { json } from '@remix-run/node';
 import { Outlet, useLoaderData } from '@remix-run/react';
 import { getAllEvents } from '~/db/eventStorage.server';
 import Tabs from '~/ui/Tabs';
@@ -6,7 +5,7 @@ import Tabs from '~/ui/Tabs';
 export const loader = async () => {
     const events = await getAllEvents();
     const eventTypesArray = Array.from(new Set(events.map((e) => e.eventType)));
-    return json({ eventTypes: eventTypesArray });
+    return ({ eventTypes: eventTypesArray });
 };
 
 export default function EventsIndex() {
