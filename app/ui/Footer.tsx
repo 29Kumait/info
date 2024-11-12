@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import Media from "~/ui/mdx/groupTow/media.mdx";
+import { SocialMediaLinks } from "~/ui/SocialMediaLinks";
 import Contact from "~/ui/mdx/groupTow/contact.mdx";
 
 type FooterCardData = {
@@ -13,7 +13,7 @@ const footerCards: FooterCardData[] = [
 ];
 
 const mdxComponents: Record<string, FC> = {
-    media: Media,
+    media: SocialMediaLinks,
     contact: Contact,
 };
 
@@ -43,6 +43,5 @@ const Footer: FC = () => (
         </div>
     </footer>
 );
-
 
 export default Footer;
