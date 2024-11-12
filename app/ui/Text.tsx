@@ -25,13 +25,7 @@ const Text: React.FC<TextProps> = ({ text, speed = 100 }) => {
         return () => clearInterval(typingInterval);
     }, [text, speed]);
 
-    return (
-        <div className=" rounded-xl m-32">
-            <code className="prose-2xl  text-5xl md:text-6xl lg:text-7xl text-blue-100 lg:m-12 mt-24 bg-cover bg-no-repeat bg-blend-multiply bg-clip-text">
-                {displayedText}
-            </code>
-        </div>
-    )
+    return <code className="prose-2xl  text-5xl md:text-6xl lg:text-7xl text-blue-100 lg:m-12 mt-24 bg-cover bg-no-repeat bg-blend-multiply bg-clip-text"> {displayedText}</code>;
 };
 
 export default Text;
