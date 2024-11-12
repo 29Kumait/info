@@ -56,7 +56,7 @@ export default function PhotosCardsGroup1() {
                 })}
             </div>
             <div className=" rounded-xl m-32">
-                <Text text={"<Project's Deployment showcase={app.active} />"} speed={200} />
+                <Text text={"<Project's Deployment showcase={app.active} />"} speed={100} />
             </div>
             <Outlet />
         </div>

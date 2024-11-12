@@ -1,20 +1,19 @@
-import React, { FC } from "react";
-import Media from "~/ui/mdx/groupTow/media.mdx";
-import Contact from "~/ui/mdx/groupTow/contact.mdx";
+// Footer.tsx
+import React, { FC, Suspense, lazy } from 'react';
 
 type FooterCardData = {
-    slug: string;
+    slug: keyof typeof mdxComponents;
     title: string;
 };
 
 const footerCards: FooterCardData[] = [
-    { slug: "media", title: "SOCIAL MEDIA" },
-    { slug: "contact", title: "CONTACT INFO" },
+    { slug: 'media', title: 'SOCIAL MEDIA' },
+    { slug: 'contact', title: 'CONTACT INFO' },
 ];
 
-const mdxComponents: Record<string, FC> = {
-    media: Media,
-    contact: Contact,
+const mdxComponents = {
+    media: lazy(() => import('~/ui/mdx/groupTow/media.mdx')),
+    contact: lazy(() => import('~/ui/mdx/groupTow/contact.mdx')),
 };
 
 interface FooterCardProps {
@@ -23,9 +22,9 @@ interface FooterCardProps {
 }
 
 const FooterCard: FC<FooterCardProps> = ({ title, children }) => (
-    <div className="relative bg-dark-blue-black-01 dark:bg-dark-blue-black-03 text-gray-200 dark:text-white rounded-lg shadow-glow p-6 transition-transform transform hover:scale-105 hover:-hue-rotate-15 hover:shadow-xl hover:shadow-blue-600/50 resource-card">
-        <h3 className="text-xl font-semibold mb-4">{title}</h3>
-        <div className="text-gray-400 dark:text-gray-300 space-y-4">{children}</div>
+    <div className="relative bg-gray-800 text-gray-200 rounded-lg shadow-md p-6 transition-transform transform hover:scale-105 hover:shadow-lg">
+        <h3 className="text-lg font-bold mb-4">{title}</h3>
+        <div className="space-y-4">{children}</div>
     </div>
 );
 
@@ -36,7 +35,9 @@ const Footer: FC = () => (
                 const Component = mdxComponents[card.slug];
                 return (
                     <FooterCard key={card.slug} title={card.title}>
-                        <Component />
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Component />
+                        </Suspense>
                     </FooterCard>
                 );
             })}
