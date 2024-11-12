@@ -90,14 +90,13 @@ export const action: ActionFunction = async ({ request }) => {
     imagePositions[imageId] = position;
 
     session.set("imagePositions", imagePositions);
-    return Response.json(
-        { positions: imagePositions },
-        {
-            headers: {
-                "Set-Cookie": await commitSession(session),
-            },
-        }
-    );
+
+    return new Response(JSON.stringify({ positions: imagePositions }), {
+        headers: {
+            "Content-Type": "application/json",
+            "Set-Cookie": await commitSession(session),
+        },
+    });
 };
 
 const rotationAnglesCache: Record<string, number> = {};
@@ -219,6 +218,7 @@ export default function Photos() {
                     </div>
                 </DndContext>
             ) : (
+                // placeholder 4 SSR
                 <div
                     ref={containerRef}
                     id="image-container"
@@ -229,7 +229,22 @@ export default function Photos() {
                             "0 0 60px rgba(255, 255, 255, 0.9), 0 0 80px rgba(0, 0, 255, 0.6)",
                     }}
                 >
+                    {/*Optional*/}
+                    {images.map((image) => {
+                        const position = imagePositions[image.fileId];
+                        const rotationAngle = getRotationAngle(image.fileId);
 
+                        return (
+                            <StaticImage
+                                key={image.fileId}
+                                image={image}
+                                position={position}
+                                rotationAngle={rotationAngle}
+                                imageWidthPercent={imageWidthPercent}
+                                imageHeightPercent={imageHeightPercent}
+                            />
+                        );
+                    })}
                 </div>
             )}
             <Outlet />
@@ -280,6 +295,40 @@ const DraggableImage = React.memo(function DraggableImage({
             className="ring-offset-white img-frame hover-glow transition-transform ease-in-out duration-300 shadow-xl drop-bounce"
             {...listeners}
             {...attributes}
+        >
+            <div className="absolute top-1 right-1 text-sm">🧷</div>
+            <img
+                src={image.url}
+                alt={image.name}
+                className="w-full h-full object-contain rounded-md"
+            />
+        </div>
+    );
+});
+
+const StaticImage = React.memo(function StaticImage({
+    image,
+    position,
+    rotationAngle,
+    imageWidthPercent,
+    imageHeightPercent,
+}: DraggableImageProps) {
+    const style = {
+        left: `${position.x}%`,
+        top: `${position.y}%`,
+        width: `${imageWidthPercent}%`,
+        height: `${imageHeightPercent}%`,
+        transform: `rotate(${rotationAngle}deg)`,
+        position: "absolute" as const,
+        boxShadow:
+            "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
+        transition: "transform 0.2s ease",
+    };
+
+    return (
+        <div
+            style={style}
+            className="ring-offset-white img-frame transition-transform ease-in-out duration-300 shadow-xl"
         >
             <div className="absolute top-1 right-1 text-sm">🧷</div>
             <img
