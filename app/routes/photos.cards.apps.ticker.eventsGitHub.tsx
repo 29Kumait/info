@@ -5,7 +5,7 @@ import Tabs from '~/ui/Tabs';
 export const loader = async () => {
     const events = await getAllEvents();
     const eventTypesArray = Array.from(new Set(events.map((e) => e.eventType)));
-    return ({ eventTypes: eventTypesArray });
+    return { eventTypes: eventTypesArray };
 };
 
 export default function EventsIndex() {

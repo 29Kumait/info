@@ -5,20 +5,7 @@ import { FC } from "react";
 import Education from "~/ui/mdx/groupOne/education.mdx";
 import Code from "~/ui/mdx/groupOne/code.mdx";
 import Skills from "~/ui/mdx/groupOne/soft.mdx";
-
-type Feature = {
-    [key: string]: string;
-};
-
-export interface App {
-    id: string;
-    title: string;
-    deployment: string;
-    github: string;
-    overview: string;
-    description: string;
-    features?: Feature[];
-}
+import Text from "~/ui/Text";
 
 type Card = {
     slug: string;
@@ -38,7 +25,7 @@ const cards: Card[] = [
 ];
 
 export const loader: LoaderFunction = async () => {
-    return ({ cards });
+    return { cards };
 };
 
 export default function PhotosCardsGroup1() {
@@ -68,10 +55,8 @@ export default function PhotosCardsGroup1() {
                     );
                 })}
             </div>
-            <div className="inset-0 bg-black opacity-25 rounded-xl m-28">
-                <h1 className="prose-2xl text-5xl md:text-6xl lg:text-9xl text-blue-100 lg:m-12 mt-24 bg-cover bg-no-repeat bg-blend-multiply bg-clip-text">
-                    {'<Projects Deployment showcase={app.active} />'}
-                </h1>
+            <div className=" rounded-xl m-32">
+                <Text text={"<Project's Deployment showcase={app.active} />"} speed={200} />
             </div>
             <Outlet />
         </div>

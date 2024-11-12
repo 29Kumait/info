@@ -1,12 +1,18 @@
-import React , {useRef , useState} from "react";
-import type {ActionFunction , LoaderFunction} from "@remix-run/node";
-import {json} from "@remix-run/node";
-import {Outlet , useFetcher , useLoaderData} from "@remix-run/react";
+import React, { useEffect, useRef, useState } from "react";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { Outlet, useFetcher, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import ImageKit from "imagekit";
-import {commitSession , getSession} from "~/sessions.server";
-import {DndContext , DragEndEvent , PointerSensor , useDraggable , useSensor , useSensors ,} from "@dnd-kit/core";
-import {restrictToParentElement} from "@dnd-kit/modifiers";
+import { commitSession, getSession } from "~/sessions.server";
+import {
+    DndContext,
+    DragEndEvent,
+    PointerSensor,
+    useDraggable,
+    useSensor,
+    useSensors,
+} from "@dnd-kit/core";
+import { restrictToParentElement } from "@dnd-kit/modifiers";
 
 interface Image {
     fileId: string;
@@ -63,21 +69,20 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     session.set("imagePositions", imagePositions);
 
-    return json<LoaderData>(
-        { images: files, positions: imagePositions },
-        {
-            headers: {
-                "Set-Cookie": await commitSession(session),
-            },
-        }
-    );
+    return { images: files, positions: imagePositions };
 };
 
 export const action: ActionFunction = async ({ request }) => {
     const session = await getSession(request.headers.get("Cookie"));
     const formData = await request.formData();
     const imageId = formData.get("imageId") as string;
-    const position = JSON.parse(formData.get("position") as string);
+    const positionData = formData.get("position") as string;
+
+    if (!imageId || !positionData) {
+        throw new Error("Invalid data");
+    }
+
+    const position: Position = JSON.parse(positionData);
 
     const imagePositions: Record<string, Position> =
         session.get("imagePositions") || {};
@@ -86,23 +91,13 @@ export const action: ActionFunction = async ({ request }) => {
 
     session.set("imagePositions", imagePositions);
 
-    return json(
-        { positions: imagePositions },
-        {
-            headers: {
-                "Set-Cookie": await commitSession(session),
-            },
-        }
-    );
+    return new Response(JSON.stringify({ positions: imagePositions }), {
+        headers: {
+            "Content-Type": "application/json",
+            "Set-Cookie": await commitSession(session),
+        },
+    });
 };
-
-function useHydrated() {
-    const [hydrated, setHydrated] = React.useState(false);
-    React.useEffect(() => {
-        setHydrated(true);
-    }, []);
-    return hydrated;
-}
 
 const rotationAnglesCache: Record<string, number> = {};
 
@@ -123,10 +118,9 @@ export default function Photos() {
     const { images, positions } = useLoaderData<LoaderData>();
     const fetcher = useFetcher();
 
-    const hydrated = useHydrated();
-
-    const [imagePositions, setImagePositions] =
-        useState<Record<string, Position>>(positions);
+    const [imagePositions, setImagePositions] = useState<Record<string, Position>>(
+        positions
+    );
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -138,11 +132,24 @@ export default function Photos() {
         })
     );
 
+    const imageWidthPercent = 18;
+    const imageHeightPercent = 36;
+
+    const [isHydrated, setIsHydrated] = useState(false);
+
+    useEffect(() => {
+        setIsHydrated(true);
+    }, []);
+
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, delta } = event;
 
-        const id = active.id as string;
+        const id = String(active.id);
         const position = imagePositions[id];
+
+        if (!position) {
+            return;
+        }
 
         if (containerRef.current) {
             const containerRect = containerRef.current.getBoundingClientRect();
@@ -163,10 +170,10 @@ export default function Photos() {
                 zIndex: maxZIndex + 1,
             };
 
-            setImagePositions({
-                ...imagePositions,
+            setImagePositions((prevPositions) => ({
+                ...prevPositions,
                 [id]: newPosition,
-            });
+            }));
 
             const formData = new FormData();
             formData.append("imageId", id);
@@ -175,26 +182,9 @@ export default function Photos() {
         }
     };
 
-    const imageWidthPercent = 18;
-    const imageHeightPercent = 36;
-
     return (
-        <div
-            className="relative w-full rounded-lg z-10 bg-cover"
-            style={{
-                backgroundImage: "url('/bg.jpg')",
-            }}
-        >
-            <div
-                className="absolute inset-0 rounded-lg pointer-events-none"
-                style={{
-                    boxShadow:
-                        "0 0 60px rgba(255, 255, 255, 0.9), 0 0 100px rgba(255, 255, 255, 0.5)",
-                    filter: "blur(12px)",
-                    zIndex: -1,
-                }}
-            ></div>
-            {hydrated ? (
+        <div className="relative w-full rounded-lg z-10 bg-cover">
+            {isHydrated ? (
                 <DndContext
                     sensors={sensors}
                     onDragEnd={handleDragEnd}
@@ -203,20 +193,13 @@ export default function Photos() {
                     <div
                         ref={containerRef}
                         id="image-container"
-                        className="relative mx-auto p-4 w-full max-w-[1229px] h-[500px] overflow-hidden rounded-lg shadow-2xl"
+                        className="relative mx-auto p-4 w-full max-w-[1229px] h-[500px] overflow-hidden shadow-2xl inset-0 bg-cover bg-center bg-no-repeat z-0 rounded-xl"
                         style={{
-                            boxShadow: "inset 0 0 20px rgba(0, 0, 255, 0.7)",
+                            backgroundImage: "url('/board.tiff')",
+                            boxShadow:
+                                "0 0 60px rgba(255, 255, 255, 0.9), 0 0 80px rgba(0, 0, 255, 0.6)",
                         }}
                     >
-                        <div
-                            className="absolute inset-0"
-                            style={{
-                                backgroundImage: "url('/board.tiff')",
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                zIndex: 0,
-                            }}
-                        ></div>
                         {images.map((image) => {
                             const position = imagePositions[image.fileId];
                             const rotationAngle = getRotationAngle(image.fileId);
@@ -235,40 +218,31 @@ export default function Photos() {
                     </div>
                 </DndContext>
             ) : (
+                // placeholder 4 SSR
                 <div
+                    ref={containerRef}
                     id="image-container"
-                    className="relative mx-auto p-4 w-full max-w-[1229px] h-[500px] overflow-hidden rounded-lg shadow-2xl"
+                    className="relative mx-auto p-4 w-full max-w-[1229px] h-[500px] overflow-hidden shadow-2xl inset-0 bg-cover bg-center bg-no-repeat z-0 rounded-xl"
                     style={{
-                        boxShadow: "inset 0 0 20px rgba(0, 0, 255, 0.7)",
+                        backgroundImage: "url('/board.tiff')",
+                        boxShadow:
+                            "0 0 60px rgba(255, 255, 255, 0.9), 0 0 80px rgba(0, 0, 255, 0.6)",
                     }}
                 >
+                    {/*Optional*/}
                     {images.map((image) => {
-                        const position = positions[image.fileId];
+                        const position = imagePositions[image.fileId];
                         const rotationAngle = getRotationAngle(image.fileId);
 
                         return (
-                            <div
+                            <StaticImage
                                 key={image.fileId}
-                                style={{
-                                    left: `${position.x}%`,
-                                    top: `${position.y}%`,
-                                    width: `${imageWidthPercent}%`,
-                                    height: `${imageHeightPercent}%`,
-                                    zIndex: position.zIndex,
-                                    transform: `rotate(${rotationAngle}deg)`,
-                                    position: "absolute" as const,
-                                    boxShadow:
-                                        "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
-                                }}
-                                className="ring-offset-white img-frame hover-glow transition-transform ease-in-out duration-300 shadow-xl drop-bounce"
-                            >
-                                <div className="absolute top-1 right-1 text-sm">🧷</div>
-                                <img
-                                    src={image.url}
-                                    alt={image.name}
-                                    className="w-full h-full object-contain rounded-md"
-                                />
-                            </div>
+                                image={image}
+                                position={position}
+                                rotationAngle={rotationAngle}
+                                imageWidthPercent={imageWidthPercent}
+                                imageHeightPercent={imageHeightPercent}
+                            />
                         );
                     })}
                 </div>
@@ -286,16 +260,16 @@ interface DraggableImageProps {
     imageHeightPercent: number;
 }
 
-function DraggableImage({
-                            image,
-                            position,
-                            rotationAngle,
-                            imageWidthPercent,
-                            imageHeightPercent,
-                        }: DraggableImageProps) {
+const DraggableImage = React.memo(function DraggableImage({
+    image,
+    position,
+    rotationAngle,
+    imageWidthPercent,
+    imageHeightPercent,
+}: DraggableImageProps) {
     const { attributes, listeners, setNodeRef, transform, isDragging } =
         useDraggable({
-            id: image.fileId,
+            id: String(image.fileId),
         });
 
     const style = {
@@ -330,4 +304,38 @@ function DraggableImage({
             />
         </div>
     );
-}
+});
+
+const StaticImage = React.memo(function StaticImage({
+    image,
+    position,
+    rotationAngle,
+    imageWidthPercent,
+    imageHeightPercent,
+}: DraggableImageProps) {
+    const style = {
+        left: `${position.x}%`,
+        top: `${position.y}%`,
+        width: `${imageWidthPercent}%`,
+        height: `${imageHeightPercent}%`,
+        transform: `rotate(${rotationAngle}deg)`,
+        position: "absolute" as const,
+        boxShadow:
+            "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
+        transition: "transform 0.2s ease",
+    };
+
+    return (
+        <div
+            style={style}
+            className="ring-offset-white img-frame transition-transform ease-in-out duration-300 shadow-xl"
+        >
+            <div className="absolute top-1 right-1 text-sm">🧷</div>
+            <img
+                src={image.url}
+                alt={image.name}
+                className="w-full h-full object-contain rounded-md"
+            />
+        </div>
+    );
+});
