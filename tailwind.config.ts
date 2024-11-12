@@ -20,6 +20,8 @@ export default {
                 "blue-glow": "0 0 4em rgba(0, 123, 255, 0.9)",
             },
             colors: {
+                primary: '#1DA1F2',
+                secondary: '#14171A',
                 focusOutline: "#1E90FF",
                 mirrorEffect: "#9ca3af",
                 cardBgLight: "#F9FAFB",

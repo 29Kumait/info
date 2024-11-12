@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/tomorrow-night-blue.css';
+import 'highlight.js/styles/github-dark-dimmed.css';
 
 interface CodeProps {
     code: string;
@@ -16,11 +16,5 @@ export function Code({ code, language }: CodeProps) {
         }
     }, [code]);
 
-    return (
-        <pre className="bg-black p-6 rounded-lg text-gray-100 shadow-xl overflow-auto border border-gray-700">
-            <code ref={ codeRef } className={ `language-${ language }` }>
-                { code }
-            </code>
-        </pre>
-    );
+    return <code ref={codeRef} className={`language-${language}`}> {code}</code>;
 }
