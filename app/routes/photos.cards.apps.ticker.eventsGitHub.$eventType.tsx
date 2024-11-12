@@ -35,7 +35,7 @@ export const action: ActionFunction = async ({ request }) => {
     }
 
     const event = await getEventById(eventId);
-    return ({ event });
+    return { event };
 };
 
 export default function EventsByType() {

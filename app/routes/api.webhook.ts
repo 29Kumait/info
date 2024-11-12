@@ -4,7 +4,7 @@ import { sanitizeEventData } from "~/utils/sanitizeData";
 import type { Event } from "~/types/type";
 
 export const loader = async () => {
-    return json({ message: "Method not allowed" }, { status: 405 });
+    return Response.json({ message: "Method not allowed" }, { status: 405 });
 };
 
 export const action = async ({
@@ -17,7 +17,7 @@ export const action = async ({
     const deliveryId = request.headers.get("X-GitHub-Delivery");
     const eventType = request.headers.get("X-GitHub-Event");
     if (!deliveryId || !eventType) {
-        return json({ message: "Invalid headers" }, 400);
+        return Response.json({ message: "Invalid headers" }, { status: 400 });
     }
 
     const payload = await request.json();
@@ -32,7 +32,7 @@ export const action = async ({
         .update(JSON.stringify(payload))
         .digest("hex")}`;
     if (signature !== generatedSignature) {
-        return json({ message: "Signature mismatch" }, 401);
+        return Response.json({ message: "Signature mismatch" }, { status: 401 });
     }
 
     const sanitizedPayload = sanitizeEventData(payload);
@@ -54,6 +54,6 @@ export const action = async ({
     const success = await insertEvent(event);
 
     return success
-        ? json({ success: true }, 200)
-        : json({ message: "Failed to save event" }, { status: 500 });
+        ? Response.json({ success: true }, { status: 200 })
+        : Response.json({ message: "Failed to save event" }, { status: 500 });
 }

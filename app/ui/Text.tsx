@@ -1,31 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface TextProps {
     text: string;
     speed?: number;
+    loop?: boolean;
 }
 
-const Text: React.FC<TextProps> = ({ text, speed = 100 }) => {
-    const [displayedText, setDisplayedText] = useState('');
+const Text: React.FC<TextProps> = ({ text, speed = 100, loop = true }) => {
+    const [displayedText, setDisplayedText] = useState("");
 
     useEffect(() => {
-        let index = 0;
-        let currentText = '';
+        let currentIndex = 0;
+        let timeoutId: NodeJS.Timeout;
 
-        const typingInterval = setInterval(() => {
-            currentText += text.charAt(index);
-            setDisplayedText(currentText);
-            index++;
+        function type() {
+            setDisplayedText(text.slice(0, currentIndex + 1));
+            currentIndex++;
 
-            if (index >= text.length) {
-                clearInterval(typingInterval);
+            if (currentIndex < text.length) {
+                timeoutId = setTimeout(type, speed);
+            } else if (loop) {
+                setTimeout(() => {
+                    currentIndex = 0;
+                    setDisplayedText("");
+                    type();
+                }, 1000);
             }
-        }, speed);
+        }
 
-        return () => clearInterval(typingInterval);
-    }, [text, speed]);
+        type();
 
-    return <code className="prose-2xl  text-5xl md:text-6xl lg:text-7xl text-blue-100 lg:m-12 mt-24 bg-cover bg-no-repeat bg-blend-multiply bg-clip-text"> {displayedText}</code>;
+        return () => clearTimeout(timeoutId);
+    }, [text, speed, loop]);
+
+    return (
+        <code className="prose-xl text-4xl md:text-5xl lg:text-7xl text-blue-100 lg:m-12 mt-24 bg-cover bg-no-repeat bg-blend-multiply bg-clip-text">
+            {displayedText}
+        </code>
+    );
 };
 
 export default Text;
