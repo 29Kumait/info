@@ -35,7 +35,7 @@ export const loader = async () => {
     const data = await db.collection("app").findOne<{ apps: App[] }>({});
     invariant(data, "No data found in the database");
 
-    return ({ apps: data.apps });
+    return { apps: data.apps };
 };
 
 export default function AppData() {

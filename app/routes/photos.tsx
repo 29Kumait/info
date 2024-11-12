@@ -1,10 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { Outlet, useFetcher, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import ImageKit from "imagekit";
 import { commitSession, getSession } from "~/sessions.server";
-import { DndContext, DragEndEvent, PointerSensor, useDraggable, useSensor, useSensors, } from "@dnd-kit/core";
+import {
+    DndContext,
+    DragEndEvent,
+    PointerSensor,
+    useDraggable,
+    useSensor,
+    useSensors,
+} from "@dnd-kit/core";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 
 interface Image {
@@ -63,14 +70,19 @@ export const loader: LoaderFunction = async ({ request }) => {
     session.set("imagePositions", imagePositions);
 
     return { images: files, positions: imagePositions };
-
 };
 
 export const action: ActionFunction = async ({ request }) => {
     const session = await getSession(request.headers.get("Cookie"));
     const formData = await request.formData();
     const imageId = formData.get("imageId") as string;
-    const position = JSON.parse(formData.get("position") as string);
+    const positionData = formData.get("position") as string;
+
+    if (!imageId || !positionData) {
+        throw new Error("Invalid data");
+    }
+
+    const position: Position = JSON.parse(positionData);
 
     const imagePositions: Record<string, Position> =
         session.get("imagePositions") || {};
@@ -78,7 +90,6 @@ export const action: ActionFunction = async ({ request }) => {
     imagePositions[imageId] = position;
 
     session.set("imagePositions", imagePositions);
-
     return Response.json(
         { positions: imagePositions },
         {
@@ -88,7 +99,6 @@ export const action: ActionFunction = async ({ request }) => {
         }
     );
 };
-
 
 const rotationAnglesCache: Record<string, number> = {};
 
@@ -109,9 +119,9 @@ export default function Photos() {
     const { images, positions } = useLoaderData<LoaderData>();
     const fetcher = useFetcher();
 
-    const hydrated = useHydrated();
-
-    const [imagePositions, setImagePositions] = useState<Record<string, Position>>(positions);
+    const [imagePositions, setImagePositions] = useState<Record<string, Position>>(
+        positions
+    );
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -123,11 +133,24 @@ export default function Photos() {
         })
     );
 
+    const imageWidthPercent = 18;
+    const imageHeightPercent = 36;
+
+    const [isHydrated, setIsHydrated] = useState(false);
+
+    useEffect(() => {
+        setIsHydrated(true);
+    }, []);
+
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, delta } = event;
 
-        const id = active.id as string;
+        const id = String(active.id);
         const position = imagePositions[id];
+
+        if (!position) {
+            return;
+        }
 
         if (containerRef.current) {
             const containerRect = containerRef.current.getBoundingClientRect();
@@ -148,10 +171,10 @@ export default function Photos() {
                 zIndex: maxZIndex + 1,
             };
 
-            setImagePositions({
-                ...imagePositions,
+            setImagePositions((prevPositions) => ({
+                ...prevPositions,
                 [id]: newPosition,
-            });
+            }));
 
             const formData = new FormData();
             formData.append("imageId", id);
@@ -160,14 +183,9 @@ export default function Photos() {
         }
     };
 
-    const imageWidthPercent = 18;
-    const imageHeightPercent = 36;
-
     return (
-        <div
-            className="relative w-full rounded-lg z-10 bg-cover"
-        >
-            {hydrated ? (
+        <div className="relative w-full rounded-lg z-10 bg-cover">
+            {isHydrated ? (
                 <DndContext
                     sensors={sensors}
                     onDragEnd={handleDragEnd}
@@ -176,30 +194,44 @@ export default function Photos() {
                     <div
                         ref={containerRef}
                         id="image-container"
-                        className="relative mx-auto p-4 w-full max-w-[1229px] h-[500px] overflow-hidden shadow-2xl inset-0 bg-cover bg-center  bg-no-repeat z-0 rounded-xl "
+                        className="relative mx-auto p-4 w-full max-w-[1229px] h-[500px] overflow-hidden shadow-2xl inset-0 bg-cover bg-center bg-no-repeat z-0 rounded-xl"
                         style={{
                             backgroundImage: "url('/board.tiff')",
                             boxShadow:
                                 "0 0 60px rgba(255, 255, 255, 0.9), 0 0 80px rgba(0, 0, 255, 0.6)",
                         }}
-                    >            {images.map((image) => {
-                        const position = imagePositions[image.fileId];
-                        const rotationAngle = getRotationAngle(image.fileId);
+                    >
+                        {images.map((image) => {
+                            const position = imagePositions[image.fileId];
+                            const rotationAngle = getRotationAngle(image.fileId);
 
-                        return (
-                            <DraggableImage
-                                key={image.fileId}
-                                image={image}
-                                position={position}
-                                rotationAngle={rotationAngle}
-                                imageWidthPercent={imageWidthPercent}
-                                imageHeightPercent={imageHeightPercent}
-                            />
-                        );
-                    })}
+                            return (
+                                <DraggableImage
+                                    key={image.fileId}
+                                    image={image}
+                                    position={position}
+                                    rotationAngle={rotationAngle}
+                                    imageWidthPercent={imageWidthPercent}
+                                    imageHeightPercent={imageHeightPercent}
+                                />
+                            );
+                        })}
                     </div>
                 </DndContext>
-            ) : null}
+            ) : (
+                <div
+                    ref={containerRef}
+                    id="image-container"
+                    className="relative mx-auto p-4 w-full max-w-[1229px] h-[500px] overflow-hidden shadow-2xl inset-0 bg-cover bg-center bg-no-repeat z-0 rounded-xl"
+                    style={{
+                        backgroundImage: "url('/board.tiff')",
+                        boxShadow:
+                            "0 0 60px rgba(255, 255, 255, 0.9), 0 0 80px rgba(0, 0, 255, 0.6)",
+                    }}
+                >
+
+                </div>
+            )}
             <Outlet />
         </div>
     );
@@ -213,7 +245,7 @@ interface DraggableImageProps {
     imageHeightPercent: number;
 }
 
-function DraggableImage({
+const DraggableImage = React.memo(function DraggableImage({
     image,
     position,
     rotationAngle,
@@ -222,7 +254,7 @@ function DraggableImage({
 }: DraggableImageProps) {
     const { attributes, listeners, setNodeRef, transform, isDragging } =
         useDraggable({
-            id: image.fileId,
+            id: String(image.fileId),
         });
 
     const style = {
@@ -257,13 +289,4 @@ function DraggableImage({
             />
         </div>
     );
-}
-
-
-function useHydrated() {
-    const [hydrated, setHydrated] = React.useState(false);
-    React.useEffect(() => {
-        setHydrated(true);
-    }, []);
-    return hydrated;
-}
+});

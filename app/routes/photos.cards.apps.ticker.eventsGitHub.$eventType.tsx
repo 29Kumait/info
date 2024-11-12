@@ -14,11 +14,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
         (event) => event.eventType === params.eventType
     );
 
-    return ({
+    return {
         events: filteredEvents,
         eventTypes: eventTypesArray,
         currentType: params.eventType,
-    });
+    };
 };
 
 export const action: ActionFunction = async ({ request }) => {
