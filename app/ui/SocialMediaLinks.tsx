@@ -15,16 +15,16 @@ const SocialMediaIcon: FC<SocialMediaIconProps> = ({ href, label, icon, download
         target="_blank"
         rel="noopener noreferrer"
         aria-label={label}
-        className="text-white inline-flex items-center p-4 rounded-lg hover:bg-gray-100 hover:shadow-lg transition"
+        className="text-white inline-flex items-center p-4 rounded-lg hover:bg-gray-100 hover:shadow-lg transition sm:p-2"
         {...(download && { download: true })}
     >
         {icon}
-        <span className="ml-2">{label}</span>
+        <span className="ml-2 hidden sm:inline">{label}</span>
     </a>
 );
 
 export const SocialMediaLinks: FC = () => (
-    <div className="flex space-x-4">
+    <div className="flex space-x-4 flex-wrap justify-center sm:space-x-2">
         <SocialMediaIcon
             href="https://github.com/29Kumait"
             label="GitHub"

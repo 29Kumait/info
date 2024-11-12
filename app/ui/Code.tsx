@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github-dark-dimmed.css';
+import 'highlight.js/styles/nord.css';
 
 interface CodeProps {
     code: string;
@@ -16,5 +16,7 @@ export function Code({ code, language }: CodeProps) {
         }
     }, [code]);
 
-    return <code ref={codeRef} className={`language-${language}`}> {code}</code>;
+    return (
+<code ref={codeRef} className={`language-${language}`}>{code}</code>
+    );
 }

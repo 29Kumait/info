@@ -25,7 +25,7 @@ interface FooterCardProps {
 const FooterCard: FC<FooterCardProps> = ({ title, children }) => (
     <div className="relative bg-gray-800 dark:bg-gray-700 text-gray-200 dark:text-gray-100 rounded-lg shadow-md p-6 transition-transform transform hover:scale-105 hover:shadow-lg">
         <h3 className="text-lg font-bold mb-4">{title}</h3>
-        <div className="space-y-4">{children}</div>
+        <div >{children}</div>
     </div>
 );
 
