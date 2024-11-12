@@ -1,7 +1,6 @@
-// SocialMediaLinks.tsx
 import { FC } from 'react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { FaArrowDown, FaDownload, FaDownLong } from 'react-icons/fa6';
+import { FaDownload } from 'react-icons/fa6';
 
 interface SocialMediaIconProps {
     href: string;
@@ -39,7 +38,7 @@ export const SocialMediaLinks: FC = () => (
         <SocialMediaIcon
             href="/download"
             label="Download CV"
-            icon={<FaDownload size={24} />} // Replace with an appropriate icon
+            icon={<FaDownload size={24} />}
             download
         />
     </div>
