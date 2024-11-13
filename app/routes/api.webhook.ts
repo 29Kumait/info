@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs } from "@remix-run/node";
 import { insertEvent } from "~/db/eventStorage.server";
 import { sanitizeEventData } from "~/utils/sanitizeData";
 import type { Event } from "~/types/type";
@@ -11,7 +11,7 @@ export const action = async ({
     request,
 }: ActionFunctionArgs) => {
     if (request.method !== "POST") {
-        return json({ message: "Method not allowed" }, 405);
+        return Response.json({ message: "Method not allowed" }, { status: 405 });
     }
     const crypto = await import("crypto");
     const deliveryId = request.headers.get("X-GitHub-Delivery");
