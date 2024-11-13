@@ -2,6 +2,7 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import { LoaderFunction } from "@remix-run/node";
 import { FC, lazy, Suspense } from "react";
 import Text from "~/ui/Text";
+import MDXWrapper from "~/ui/MDXWrapper";
 
 const Education = lazy(() => import("~/ui/mdx/groupOne/education.mdx"));
 const Code = lazy(() => import("~/ui/mdx/groupOne/code.mdx"));
@@ -51,7 +52,7 @@ export default function PhotosCardsGroup1() {
                             </h2>
                             <div className="max-h-48 overflow-y-auto hidden-scrollbar">
                                 <Suspense fallback={<div>Loading...</div>}>
-                                    <Component />
+                                    <MDXWrapper Component={Component} />
                                 </Suspense>
                             </div>
                         </div>
