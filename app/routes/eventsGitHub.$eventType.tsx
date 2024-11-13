@@ -1,41 +1,21 @@
-import { LoaderFunctionArgs, ActionFunction } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import type { LoaderFunctionArgs } from '@remix-run/node';
+import { useLoaderData, Outlet } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 import Masonry from 'react-masonry-css';
-import { getAllEvents, getEventById } from '~/db/eventStorage.server';
+import { getAllEvents } from '~/db/eventStorage.server';
 import EventCard from '~/ui/EventCard';
-
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     invariant(params.eventType, 'Expected params.eventType');
     const events = await getAllEvents();
-    const eventTypesArray = Array.from(new Set(events.map((e) => e.eventType)));
     const filteredEvents = events.filter(
         (event) => event.eventType === params.eventType
     );
 
     return {
         events: filteredEvents,
-        eventTypes: eventTypesArray,
         currentType: params.eventType,
     };
-};
-
-export const action: ActionFunction = async ({ request }) => {
-    const formData = await request.formData();
-    const closeModal = formData.get('closeModal');
-    const eventId = formData.get('eventId');
-
-    if (closeModal === 'true') {
-        return ({ event: null });
-    }
-
-    if (!eventId || typeof eventId !== 'string') {
-        return ({ error: 'Invalid event ID' });
-    }
-
-    const event = await getEventById(eventId);
-    return { event };
 };
 
 export default function EventsByType() {
@@ -47,10 +27,6 @@ export default function EventsByType() {
                 {currentType.replace(/_/g, ' ').toUpperCase()}
             </h1>
 
-            {/* Navigation Tabs */}
-            {/* <Tabs eventTypes={eventTypes} /> */}
-
-            {/* Event Cards */}
             <Masonry
                 breakpointCols={{
                     default: 3,
@@ -64,6 +40,7 @@ export default function EventsByType() {
                     <EventCard key={event.id} event={event} />
                 ))}
             </Masonry>
+            <Outlet />
         </div>
     );
 }

@@ -11,7 +11,7 @@ export default function Tabs({ eventTypes }: TabsProps) {
                 <NavLink
                     key={eventType}
                     prefetch="intent"
-                    to={`${normalizeEventType(eventType)}`}
+                    to={normalizeEventType(eventType)}
                     preventScrollReset
                     className={({ isActive }) =>
                         `pb-2 text-lg font-medium ${isActive
