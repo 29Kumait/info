@@ -8,8 +8,8 @@ type FooterCardData = {
 };
 
 const footerCards: FooterCardData[] = [
-    { slug: "media", title: "SOCIAL MEDIA" },
     { slug: "contact", title: "CONTACT INFO" },
+    { slug: "media", title: "SOCIAL MEDIA" },
 ];
 
 const mdxComponents: Record<string, FC> = {

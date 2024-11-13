@@ -40,14 +40,13 @@ export const loader = async () => {
 
 export default function AppData() {
     const { apps } = useLoaderData<LoaderData>();
+    const [searchParams] = useSearchParams();
+    const appId = searchParams.get("appId");
+    const activeApp = apps.find((app) => app.id === appId) || apps[0];
 
     if (!apps || apps.length === 0) {
         return <div>No applications available.</div>;
     }
-
-    const [searchParams] = useSearchParams();
-    const appId = searchParams.get("appId");
-    const activeApp = apps.find((app) => app.id === appId) || apps[0];
 
     return (
         <div
@@ -58,23 +57,24 @@ export default function AppData() {
                     "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
             }}
         >
-            <nav className="justify-between border-b border-[#50e5ff] flex mb-8 overflow-x-auto relative z-10">                {apps.map((app) => {
-                const isActive = searchParams.get("appId") === app.id;
-                return (
-                    <NavLink
-                        key={app.id}
-                        prefetch="viewport"
-                        to={`?appId=${app.id}`}
-                        preventScrollReset
-                        className={`whitespace-nowrap mr-2 md:mr-4 px-4 py-2 md:px-6 md:py-3 ${isActive
-                            ? "border-b-4 border-[#7ab6ff] text-blue-100"
-                            : "text-[#6382b3] hover:text-[#50e5ff]"
-                            }`}
-                    >
-                        {app.github}
-                    </NavLink>
-                );
-            })}
+            <nav className="justify-between border-b border-[#50e5ff] flex mb-8 overflow-x-auto relative z-10">
+                {apps.map((app) => {
+                    const isActive = searchParams.get("appId") === app.id;
+                    return (
+                        <NavLink
+                            key={app.id}
+                            prefetch="viewport"
+                            to={`?appId=${app.id}`}
+                            preventScrollReset
+                            className={`whitespace-nowrap mr-2 md:mr-4 px-4 py-2 md:px-6 md:py-3 ${isActive
+                                ? "border-b-4 border-[#7ab6ff] text-blue-100"
+                                : "text-[#6382b3] hover:text-[#50e5ff]"
+                                }`}
+                        >
+                            {app.github}
+                        </NavLink>
+                    );
+                })}
             </nav>
 
             <div className="max-w-5xl mx-auto p-8 m-5 relative mt-24">
@@ -106,6 +106,7 @@ export default function AppData() {
                                 src={activeApp.deployment}
                                 title={activeApp.title}
                                 className="absolute top-0 left-0 w-full h-full rounded-lg"
+                                width="640" height="360" // Recommended for layout stability
                                 allow="autoplay; fullscreen"
                                 allowFullScreen
                                 loading="lazy"
@@ -113,13 +114,7 @@ export default function AppData() {
                         </div>
                     </div>
 
-                    <div
-                        className="text-center text-xl md:text-3xl lg:text-5xl text-blue-100 mb-16 mt-12 p-4 max-w-screen-lg w-full border border-gray-200 rounded-lg shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4"
-                        style={{
-                            boxShadow:
-                                "0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(0, 0, 255, 0.4)",
-                        }}
-                    >
+                    <div className="text-center text-xl md:text-3xl lg:text-5xl text-blue-100 mb-16 mt-12 p-4 max-w-screen-lg w-full border border-gray-200 rounded-lg shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>{activeApp.overview}</div>
                         {activeApp.features && activeApp.features.map((feature, index) => {
                             const [title, description] = Object.entries(feature)[0];
@@ -138,7 +133,8 @@ export default function AppData() {
                     style={{
                         boxShadow:
                             "0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(0, 0, 255, 0.4)",
-                    }}   >
+                    }}
+                >
                     <div className="mb-8">{activeApp.overview}</div>
                     {activeApp.features && activeApp.features.length > 0 ? (
                         <div className="animate-marquee flex space-x-8">
@@ -164,7 +160,8 @@ export default function AppData() {
                                     >
                                         <h4 className="text-lg font-semibold break-words">
                                             {title}
-                                        </h4>                                    </div>
+                                        </h4>
+                                    </div>
                                 );
                             })}
                         </div>

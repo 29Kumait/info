@@ -1,11 +1,12 @@
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { LoaderFunction } from "@remix-run/node";
-import { FC } from "react";
-
-import Education from "~/ui/mdx/groupOne/education.mdx";
-import Code from "~/ui/mdx/groupOne/code.mdx";
-import Skills from "~/ui/mdx/groupOne/soft.mdx";
+import { FC, lazy, Suspense } from "react";
 import Text from "~/ui/Text";
+import MDXWrapper from "~/ui/MDXWrapper";
+
+const Education = lazy(() => import("~/ui/mdx/groupOne/education.mdx"));
+const Code = lazy(() => import("~/ui/mdx/groupOne/code.mdx"));
+const Skills = lazy(() => import("~/ui/mdx/groupOne/soft.mdx"));
 
 type Card = {
     slug: string;
@@ -24,6 +25,7 @@ const cards: Card[] = [
     { slug: "skills", title: "Soft Skills" },
 ];
 
+// Loader returns naked object
 export const loader: LoaderFunction = async () => {
     return { cards };
 };
@@ -49,13 +51,15 @@ export default function PhotosCardsGroup1() {
                                 {card.title}
                             </h2>
                             <div className="max-h-48 overflow-y-auto hidden-scrollbar">
-                                <Component />
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    <MDXWrapper Component={Component} />
+                                </Suspense>
                             </div>
                         </div>
                     );
                 })}
             </div>
-            <div className=" rounded-xl m-32">
+            <div className="rounded-xl m-32">
                 <Text text="<Project's Deployment showcase={app.active} />" speed={200} loop={true} />
             </div>
             <Outlet />

@@ -3,7 +3,6 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { Outlet, useFetcher, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import ImageKit from "imagekit";
-import { commitSession, getSession } from "~/sessions.server";
 import {
     DndContext,
     DragEndEvent,
@@ -32,12 +31,9 @@ interface LoaderData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const session = await getSession(request.headers.get("Cookie"));
-
-    const imagePositions: Record<string, Position> =
-        session.get("imagePositions") || {};
-
-    invariant(process.env.IMAGEKIT_PUBLIC_KEY, "IMAGEKIT_PUBLIC_KEY is required");
+    invariant(process.env.IMAGEKIT_PUBLIC_KEY,
+        "IMAGEKIT_PUBLIC_KEY is required"
+    );
     invariant(
         process.env.IMAGEKIT_PRIVATE_KEY,
         "IMAGEKIT_PRIVATE_KEY is required"
@@ -54,6 +50,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
 
     const files = await imagekit.listFiles({});
+    const imagePositions: Record<string, Position> = {};
 
     files.forEach((image, index) => {
         if (!imagePositions[image.fileId]) {
@@ -67,13 +64,10 @@ export const loader: LoaderFunction = async ({ request }) => {
         }
     });
 
-    session.set("imagePositions", imagePositions);
-
     return { images: files, positions: imagePositions };
 };
 
 export const action: ActionFunction = async ({ request }) => {
-    const session = await getSession(request.headers.get("Cookie"));
     const formData = await request.formData();
     const imageId = formData.get("imageId") as string;
     const positionData = formData.get("position") as string;
@@ -84,19 +78,8 @@ export const action: ActionFunction = async ({ request }) => {
 
     const position: Position = JSON.parse(positionData);
 
-    const imagePositions: Record<string, Position> =
-        session.get("imagePositions") || {};
+    return { positions: { [imageId]: position } };
 
-    imagePositions[imageId] = position;
-
-    session.set("imagePositions", imagePositions);
-
-    return new Response(JSON.stringify({ positions: imagePositions }), {
-        headers: {
-            "Content-Type": "application/json",
-            "Set-Cookie": await commitSession(session),
-        },
-    });
 };
 
 const rotationAnglesCache: Record<string, number> = {};
@@ -135,7 +118,7 @@ export default function Photos() {
     const imageWidthPercent = 18;
     const imageHeightPercent = 36;
 
-    const [isHydrated, setIsHydrated] = useState(false);
+    const [hydrated, setIsHydrated] = useState(false);
 
     useEffect(() => {
         setIsHydrated(true);
@@ -147,34 +130,33 @@ export default function Photos() {
         const id = String(active.id);
         const position = imagePositions[id];
 
-        if (!position) {
-            return;
-        }
+        if (!position || !containerRef.current) return;
 
-        if (containerRef.current) {
-            const containerRect = containerRef.current.getBoundingClientRect();
 
-            const xPercent = position.x + (delta.x / containerRect.width) * 100;
-            const yPercent = position.y + (delta.y / containerRect.height) * 100;
+        const containerRect = containerRef.current.getBoundingClientRect();
 
-            const newX = Math.max(0, Math.min(100 - imageWidthPercent, xPercent));
-            const newY = Math.max(0, Math.min(100 - imageHeightPercent, yPercent));
+        const xPercent = position.x + (delta.x / containerRect.width) * 100;
+        const yPercent = position.y + (delta.y / containerRect.height) * 100;
 
-            const maxZIndex = Math.max(
-                ...Object.values(imagePositions).map((pos) => pos.zIndex)
-            );
+        const newX = Math.max(0, Math.min(100 - imageWidthPercent, xPercent));
+        const newY = Math.max(0, Math.min(100 - imageHeightPercent, yPercent));
 
-            const newPosition = {
-                x: newX,
-                y: newY,
-                zIndex: maxZIndex + 1,
-            };
+        const maxZIndex = Math.max(
+            ...Object.values(imagePositions).map((pos) => pos.zIndex)
+        );
 
-            setImagePositions((prevPositions) => ({
-                ...prevPositions,
-                [id]: newPosition,
-            }));
+        const newPosition = {
+            x: newX,
+            y: newY,
+            zIndex: maxZIndex + 1,
+        };
 
+        setImagePositions((prevPositions) => ({
+            ...prevPositions,
+            [id]: newPosition,
+        }));
+
+        if (hydrated) {
             const formData = new FormData();
             formData.append("imageId", id);
             formData.append("position", JSON.stringify(newPosition));
@@ -184,7 +166,7 @@ export default function Photos() {
 
     return (
         <div className="relative w-full rounded-lg z-10 bg-cover">
-            {isHydrated ? (
+            {hydrated ? (
                 <DndContext
                     sensors={sensors}
                     onDragEnd={handleDragEnd}
@@ -203,7 +185,6 @@ export default function Photos() {
                         {images.map((image) => {
                             const position = imagePositions[image.fileId];
                             const rotationAngle = getRotationAngle(image.fileId);
-
                             return (
                                 <DraggableImage
                                     key={image.fileId}
@@ -229,22 +210,7 @@ export default function Photos() {
                             "0 0 60px rgba(255, 255, 255, 0.9), 0 0 80px rgba(0, 0, 255, 0.6)",
                     }}
                 >
-                    {/*Optional*/}
-                    {images.map((image) => {
-                        const position = imagePositions[image.fileId];
-                        const rotationAngle = getRotationAngle(image.fileId);
 
-                        return (
-                            <StaticImage
-                                key={image.fileId}
-                                image={image}
-                                position={position}
-                                rotationAngle={rotationAngle}
-                                imageWidthPercent={imageWidthPercent}
-                                imageHeightPercent={imageHeightPercent}
-                            />
-                        );
-                    })}
                 </div>
             )}
             <Outlet />
@@ -306,36 +272,4 @@ const DraggableImage = React.memo(function DraggableImage({
     );
 });
 
-const StaticImage = React.memo(function StaticImage({
-    image,
-    position,
-    rotationAngle,
-    imageWidthPercent,
-    imageHeightPercent,
-}: DraggableImageProps) {
-    const style = {
-        left: `${position.x}%`,
-        top: `${position.y}%`,
-        width: `${imageWidthPercent}%`,
-        height: `${imageHeightPercent}%`,
-        transform: `rotate(${rotationAngle}deg)`,
-        position: "absolute" as const,
-        boxShadow:
-            "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
-        transition: "transform 0.2s ease",
-    };
 
-    return (
-        <div
-            style={style}
-            className="ring-offset-white img-frame transition-transform ease-in-out duration-300 shadow-xl"
-        >
-            <div className="absolute top-1 right-1 text-sm">🧷</div>
-            <img
-                src={image.url}
-                alt={image.name}
-                className="w-full h-full object-contain rounded-md"
-            />
-        </div>
-    );
-});

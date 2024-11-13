@@ -195,7 +195,6 @@ body {
   }
 }
 
-/* Border Glow Once Animation */
 @keyframes borderGlowOnce {
   0% {
     background-position: 0% 50%;
@@ -204,4 +203,38 @@ body {
   100% {
     background-position: 200% 50%;
   }
+}
+
+/* Fade In Animation */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+/* Keyframes for fadeIn */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Scroll Hint Animation */
+@keyframes scrollHint {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-13%);
+  }
+}
+
+.scroll-hint {
+  animation: scrollHint 2s ease-in-out;
+  animation-iteration-count: 1;
 }
