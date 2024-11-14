@@ -11,5 +11,5 @@ export const meta: MetaFunction = () => {
 
 
 export const loader: LoaderFunction = async () => {
-  return redirect(`photos/cards/apps/ticker/eventsGitHub/pull_request`);
+  return redirect(`main`);
 };

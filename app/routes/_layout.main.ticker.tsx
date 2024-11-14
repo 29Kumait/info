@@ -1,16 +1,22 @@
 import { useLoaderData, Outlet } from "@remix-run/react";
+import { LoaderFunction } from "@remix-run/node";
 import { CARDS } from "~/data";
 import type { Card } from "~/types/type";
 import invariant from "tiny-invariant";
 
-export const loader = async () => {
+export const loader: LoaderFunction = async () => {
     invariant(CARDS.length > 0, "CARDS data must not be empty");
     return { cards: CARDS };
 };
 
-export default function Ticker() {
+export default function TickerRoute() {
     const { cards } = useLoaderData<{ cards: Card[] }>();
     invariant(cards.length > 0, "No cards loaded");
+
+    return <TickerSection cards={cards} />;
+}
+
+export function TickerSection({ cards }: { cards: Card[] }) {
 
     const duplicatedCards = [...cards, ...cards];
 

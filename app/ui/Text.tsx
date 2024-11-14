@@ -34,7 +34,7 @@ const Text: React.FC<TextProps> = ({ text, speed = 100, loop = true }) => {
     }, [text, speed, loop]);
 
     return (
-        <code className="prose-xl text-4xl md:text-5xl lg:text-7xl text-blue-100 lg:m-12 mt-24 bg-cover bg-no-repeat bg-blend-multiply bg-clip-text">
+        <code className="prose-xl text-3xl md:text-4xl lg:text-6xl text-[#50e5ff] hover:text-[#7ab6ffe5] lg:m-12">
             {displayedText}
         </code>
     );

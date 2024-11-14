@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/nord.css';
+import 'highlight.js/styles/foundation.min.css';
 
 interface CodeProps {
     code: string;
@@ -17,6 +17,6 @@ export function Code({ code, language }: CodeProps) {
     }, [code]);
 
     return (
-<code ref={codeRef} className={`language-${language}`}>{code}</code>
+        <code ref={codeRef} className={`language-${language}`}>{code}</code>
     );
 }

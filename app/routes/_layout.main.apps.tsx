@@ -1,3 +1,4 @@
+import type { LoaderFunction } from "@remix-run/node";
 import {
     useSearchParams,
     useLoaderData,
@@ -6,6 +7,7 @@ import {
 } from "@remix-run/react";
 import { connectDB } from "~/db/mongoDB.server";
 import invariant from "tiny-invariant";
+import Text from "~/ui/Text";
 
 export interface Feature {
     [key: string]: string;
@@ -28,7 +30,7 @@ interface LoaderData {
     apps: App[];
 }
 
-export const loader = async () => {
+export const loader: LoaderFunction = async () => {
     const { db } = await connectDB();
     invariant(db, "Failed to connect to the database");
 
@@ -38,8 +40,12 @@ export const loader = async () => {
     return { apps: data.apps };
 };
 
-export default function AppData() {
+export default function AppsRoute() {
     const { apps } = useLoaderData<LoaderData>();
+    return <AppsSection apps={apps} />;
+}
+
+export function AppsSection({ apps }: { apps: App[] }) {
     const [searchParams] = useSearchParams();
     const appId = searchParams.get("appId");
     const activeApp = apps.find((app) => app.id === appId) || apps[0];
@@ -57,6 +63,10 @@ export default function AppData() {
                     "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
             }}
         >
+            <div className="rounded-xl m-8 p-6 bg-dark-blue-black-01 flex items-center justify-center min-h-[200px] h-[200px] overflow-hidden">
+                <Text text="<Project's Deployment showcase={app.active} />" speed={200} loop={true} />
+            </div>
+
             <nav className="justify-between border-b border-[#50e5ff] flex mb-8 overflow-x-auto relative z-10">
                 {apps.map((app) => {
                     const isActive = searchParams.get("appId") === app.id;
