@@ -1,14 +1,15 @@
 import { Outlet, useLoaderData } from '@remix-run/react';
+import type { LoaderFunction } from '@remix-run/node';
 import { getAllEvents } from '~/db/eventStorage.server';
 import Tabs from '~/ui/Tabs';
 
-export const loader = async () => {
+export const loader: LoaderFunction = async () => {
     const events = await getAllEvents();
     const eventTypesArray = Array.from(new Set(events.map((e) => e.eventType)));
     return { eventTypes: eventTypesArray };
 };
 
-export default function EventsIndex() {
+export default function Events() {
     const { eventTypes } = useLoaderData<typeof loader>();
 
     return (

@@ -1,7 +1,6 @@
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { LoaderFunction } from "@remix-run/node";
 import { FC, lazy, Suspense } from "react";
-import Text from "~/ui/Text";
 import MDXWrapper from "~/ui/MDXWrapper";
 
 const Education = lazy(() => import("~/ui/mdx/groupOne/education.mdx"));
@@ -25,18 +24,20 @@ const cards: Card[] = [
     { slug: "skills", title: "Soft Skills" },
 ];
 
-// Loader returns naked object
 export const loader: LoaderFunction = async () => {
     return { cards };
 };
 
-export default function PhotosCardsGroup1() {
+export default function CardsRoute() {
     const { cards } = useLoaderData<{ cards: Card[] }>();
+    return <CardsSection cards={cards} />;
+}
+
+export function CardsSection({ cards }: { cards: Card[] }) {
 
     return (
         <div
-            className="p-8 mt-36 bg-cover bg-center bg-opacity-90 relative"
-            style={{ backgroundImage: "url('/board.tiff')" }}
+            className="p-8 mb-24 mt-32 bg-dark-blue-black-01 bg-cover bg-center bg-opacity-90 relative"
         >
             <div className="absolute inset-0 bg-black opacity-10 rounded-xl"></div>
             <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-8 relative z-10 max-w-screen-2xl mx-auto">
@@ -59,9 +60,7 @@ export default function PhotosCardsGroup1() {
                     );
                 })}
             </div>
-            <div className="rounded-xl m-32">
-                <Text text="<Project's Deployment showcase={app.active} />" speed={200} loop={true} />
-            </div>
+
             <Outlet />
         </div>
     );

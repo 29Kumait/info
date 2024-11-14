@@ -15,7 +15,7 @@ const SocialMediaIcon: FC<SocialMediaIconProps> = ({ href, label, icon, download
         target="_blank"
         rel="noopener noreferrer"
         aria-label={label}
-        className="text-white inline-flex items-center p-4 rounded-lg hover:bg-gray-100 hover:shadow-lg transition sm:p-2"
+        className="inline-flex items-center p-4 rounded-lg hover:bg-gray-100 hover:shadow-lg transition sm:p-2"
         {...(download && { download: true })}
     >
         {icon}

@@ -1,4 +1,3 @@
-// app/routes/eventsGitHub.$eventType.$eventId.tsx
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData, useNavigate } from '@remix-run/react';
 import { getEventById } from '~/db/eventStorage.server';
@@ -9,9 +8,7 @@ import invariant from 'tiny-invariant';
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     invariant(params.eventId, 'Expected params.eventId');
     const event = await getEventById(params.eventId);
-    if (!event) {
-        throw new Response('Event Not Found', { status: 404 });
-    }
+    if (!event) throw new Response('Event Not Found', { status: 404 });
     return { event };
 };
 
