@@ -1,7 +1,7 @@
 
 
 import { LoaderFunction, ActionFunction } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import INFO from "~/ui/ContactInfo";
 import { PhotoSection } from "./_layout.main.photos";
 import { loader as photosLoader } from "./_layout.main.photos";
@@ -55,7 +55,5 @@ export default function MainLayout() {
                 <Tabs eventTypes={eventTypes} />
             </nav>
             <TickerSection cards={tickerData.cards} />
-
-            <Outlet />
         </div>)
 }
