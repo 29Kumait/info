@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { SocialMediaLinks } from "~/ui/SocialMediaLinks";
-import Contact from "~/ui/mdx/groupTow/contact.mdx";
+import Contact from "~/routes/mdx/groupTow/contact.mdx";
 
 type InfoCardData = {
     slug: string;

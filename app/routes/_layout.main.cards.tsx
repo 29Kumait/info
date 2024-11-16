@@ -3,9 +3,9 @@ import { LoaderFunction } from "@remix-run/node";
 import { FC, lazy, Suspense } from "react";
 import MDXWrapper from "~/ui/MDXWrapper";
 
-const Education = lazy(() => import("~/ui/mdx/groupOne/education.mdx"));
-const Code = lazy(() => import("~/ui/mdx/groupOne/code.mdx"));
-const Skills = lazy(() => import("~/ui/mdx/groupOne/soft.mdx"));
+const Education = lazy(() => import("~/routes/mdx/groupOne/education.mdx"));
+const Code = lazy(() => import("~/routes/mdx/groupOne/code.mdx"));
+const Skills = lazy(() => import("~/routes/mdx/groupOne/soft.mdx"));
 
 type Card = {
     slug: string;
