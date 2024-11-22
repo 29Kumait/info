@@ -1,95 +1,114 @@
+// import { useEffect, useRef, useState } from "react";
+
+// export default function TypingEffect() {
+//     const [textContent, setTextContent] = useState("");
+//     const containerRef = useRef<HTMLDivElement>(null);
+
+//     useEffect(() => {
+//         console.log("Connecting to EventSource");
+
+//         const eventSource = new EventSource("/typing-effect-stream");
+
+//         eventSource.onmessage = (event) => {
+//             console.log("Received message:", event.data);
+
+//             setTextContent(event.data);
+//         };
+
+//         return () => {
+//             eventSource.close();
+//         };
+//     }, []);
+
+//     return (
+//         <div className="rounded-xl m-32">
+//             <div ref={containerRef} suppressHydrationWarning={true}>
+//                 <code>{textContent}</code>
+//             </div>
+//         </div>
+//     );
+// }
+
+
+
 import { useEffect, useRef, useState } from "react";
-import Prism from "prismjs";
-import "prismjs/themes/prism-tomorrow.css";
-import "prismjs/components/prism-typescript";
 
-interface CodePreviewerProps {
-    code: string;
-    language?: string;
+interface TypingEffectProps {
+    textOption?: string;
+    customText?: string;
     speed?: number;
+    loop?: boolean;
+    className?: string;
+    startDelay?: number;
 }
 
-function CodePreviewer({ code, language = "typescript", speed = 50 }: CodePreviewerProps) {
-    const [typedCode, setTypedCode] = useState("");
-    const [copied, setCopied] = useState(false);
-    const codeRef = useRef<HTMLElement | null>(null);
-    const [dynamicClassName, setDynamicClassName] = useState("");
+export default function TypingEffect({
+    textOption = "welcome",
+    customText,
+    speed = 200,
+    loop = true,
+    className = "",
+    startDelay = 0
+}: TypingEffectProps) {
+    const [textContent, setTextContent] = useState("");
+    const eventSourceRef = useRef<EventSource | null>(null);
 
     useEffect(() => {
-        let currentCode = "";
-        let index = 0;
+        let timeoutId: NodeJS.Timeout;
 
-        const interval = setInterval(() => {
-            if (index < code.length) {
-                currentCode += code[index];
-                setTypedCode(currentCode);
-                index++;
-            } else {
-                clearInterval(interval);
+        const initEventSource = () => {
+            const queryParams = new URLSearchParams({
+                text: textOption,
+                speed: speed.toString()
+            });
+
+            if (customText) {
+                queryParams.set("custom", customText);
             }
-        }, speed);
 
-        return () => clearInterval(interval);
-    }, [code, speed]);
+            const url = `/typing-effect-stream?${queryParams.toString()}`;
+            eventSourceRef.current = new EventSource(url);
 
-    useEffect(() => {
-        if (codeRef.current) {
-            setDynamicClassName(`language-${language}`);
-            Prism.highlightElement(codeRef.current);
-        }
-    }, [typedCode, language]);
+            eventSourceRef.current.onmessage = (event) => {
+                setTextContent(event.data);
+            };
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(code).then(() => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        });
-    };
+            eventSourceRef.current.addEventListener('end', () => {
+                if (loop) {
+                    timeoutId = setTimeout(() => {
+                        setTextContent("");
+                        eventSourceRef.current?.close();
+                        initEventSource(); // Reinitialize for continuous loop
+                    }, 2000); // Longer pause between loops
+                } else {
+                    eventSourceRef.current?.close();
+                }
+            });
+
+            eventSourceRef.current.onerror = () => {
+                eventSourceRef.current?.close();
+                if (loop) {
+                    timeoutId = setTimeout(initEventSource, 1000);
+                }
+            };
+        };
+
+        const timer = setTimeout(initEventSource, startDelay);
+
+        return () => {
+            clearTimeout(timer);
+            clearTimeout(timeoutId);
+            eventSourceRef.current?.close();
+        };
+    }, [textOption, customText, speed, loop, startDelay]);
 
     return (
-        <div className="relative bg-gray-800 text-white p-4 rounded-lg shadow-lg">
-            <button
-                onClick={handleCopy}
-                className="absolute top-4 right-4 px-3 py-1 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 custom-ease"
-
-            >
-                {copied ? "Copied!" : "Copy"}
-            </button>
-            <pre className="text-sm leading-6">
-                <code
-                    ref={codeRef}
-                    suppressHydrationWarning={true}
-                    className={dynamicClassName || ""}
-                >
-                    {typedCode}
+        <div className={`typing-effect-container ${className}`}>
+            <div className="relative font-mono">
+                <code className="text-inherit transition-colors duration-300">
+                    {textContent}
                 </code>
-            </pre>
-        </div>
-    );
-}
-
-
-
-export default function CodePreviewPage() {
-    const codeSnippet = `
-  import React from 'react';
-
-  function App() {
-    return (
-      <div className="App">
-        <h1>Hello World!</h1>
-      </div>
-    );
-  }
-
-  export default App;
-  `;
-
-    return (
-        <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
-            <div className="max-w-4xl w-full">
-                <h1 className="text-3xl font-bold mb-6 text-center">Code Previewer</h1>
-                <CodePreviewer code={codeSnippet} language="typescript" speed={50} />
+                <span className="typing-cursor animate-blink">|</span>
             </div>
         </div>
     );
