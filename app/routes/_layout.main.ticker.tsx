@@ -1,22 +1,22 @@
-import { useLoaderData, Outlet } from "@remix-run/react";
-import { LoaderFunction } from "@remix-run/node";
-import { CARDS } from "~/data";
+// import { useLoaderData } from "@remix-run/react";
+// import { LoaderFunction } from "@remix-run/node";
+// import { CARDS } from "~/data";
 import type { Card } from "~/types/type";
-import invariant from "tiny-invariant";
+// import invariant from "tiny-invariant";
 
-export const loader: LoaderFunction = async () => {
-    invariant(CARDS.length > 0, "CARDS data must not be empty");
-    return { cards: CARDS };
-};
+// export const loader: LoaderFunction = async () => {
+//     invariant(CARDS.length > 0, "CARDS data must not be empty");
+//     return { cards: CARDS };
+// };
 
-export default function TickerRoute() {
-    const { cards } = useLoaderData<{ cards: Card[] }>();
-    invariant(cards.length > 0, "No cards loaded");
+// export default function TickerRoute() {
+//     const { cards } = useLoaderData<{ cards: Card[] }>();
+//     invariant(cards.length > 0, "No cards loaded");
+//
+//     return <Ticker cards={cards} />;
+// }
 
-    return <TickerSection cards={cards} />;
-}
-
-export function TickerSection({ cards }: { cards: Card[] }) {
+export default function Ticker({ cards }: { cards: Card[] }) {
 
     const duplicatedCards = [...cards, ...cards];
 
@@ -40,7 +40,6 @@ export function TickerSection({ cards }: { cards: Card[] }) {
                     ))}
                 </div>
             </div>
-            <Outlet />
         </div>
     );
 }

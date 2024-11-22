@@ -1,0 +1,135 @@
+:root {
+  --page-bg-gradient: linear-gradient(135deg, #0a0a0a, #161616);
+  --card-bg-gradient: linear-gradient(135deg, #111111, #1c1c1c);
+  --card-border-gradient: linear-gradient(135deg, #6c63ff, #28c6f7);
+  --card-radius: 16px;
+  --card-padding: 2rem;
+  --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  --container-width: 50%;
+  --container-height: 90vh;
+
+  --font-family: "Inter", sans-serif;
+  --heading-color: #ffffff;
+  --text-color: #9aa0a6;
+  --heading-font-size: 1.75rem;
+  --text-font-size: 1rem;
+
+  --button-border: rgba(255, 255, 255, 0.6);
+  --button-hover-bg: rgba(255, 255, 255, 0.1);
+  --button-text-color: #ffffff;
+  --button-radius: 8px;
+  --button-padding: 0.75rem 1.5rem;
+
+  --code-bg: rgba(0, 0, 0, 0.5);
+  --code-color: #dcdcdc;
+  --code-font-family: "Courier New", monospace;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--page-bg-gradient);
+  font-family: var(--font-family);
+  background-image: url("/bag.JPG");
+  background-size: cover;
+}
+
+.card {
+  position: relative;
+  background: transparent !important;
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: var(--card-padding);
+  width: var(--container-width);
+  max-width: 90%;
+  text-align: center;
+  color: var(--heading-color);
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: -2px;
+  border-radius: inherit;
+  background: var(--card-border-gradient) !important;
+  z-index: -1;
+}
+
+.card h2 {
+  font-size: var(--heading-font-size);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--heading-color);
+}
+
+.card p {
+  font-size: var(--text-font-size);
+  color: var(--text-color);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.card pre {
+  background: transparent !important;
+  color: var(--code-color);
+  font-family: var(--code-font-family);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-y: auto;
+  max-height: 300px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: left;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.card button {
+  background: none;
+  border: 1px solid var(--button-border);
+  color: var(--button-text-color);
+  padding: var(--button-padding);
+  border-radius: var(--button-radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.card button:hover {
+  background: var(--button-hover-bg);
+}
+
+.card pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.card pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 1.5rem;
+  }
+
+  .card h2 {
+    font-size: 1.5rem;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+  }
+
+  .card pre {
+    font-size: 0.8rem;
+    max-height: 200px;
+  }
+}

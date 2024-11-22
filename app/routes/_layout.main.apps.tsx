@@ -1,12 +1,11 @@
-import type { LoaderFunction } from "@remix-run/node";
+// import type { LoaderFunction } from "@remix-run/node";
 import {
     useSearchParams,
     useLoaderData,
     NavLink,
-    Outlet,
 } from "@remix-run/react";
-import { connectDB } from "~/db/mongoDB.server";
-import invariant from "tiny-invariant";
+// import { connectDB } from "~/db/mongoDB.server";
+// import invariant from "tiny-invariant";
 import Text from "~/ui/Text";
 
 export interface Feature {
@@ -30,15 +29,15 @@ interface LoaderData {
     apps: App[];
 }
 
-export const loader: LoaderFunction = async () => {
-    const { db } = await connectDB();
-    invariant(db, "Failed to connect to the database");
-
-    const data = await db.collection("app").findOne<{ apps: App[] }>({});
-    invariant(data, "No data found in the database");
-
-    return { apps: data.apps };
-};
+// export const loader: LoaderFunction = async () => {
+//     const { db } = await connectDB();
+//     invariant(db, "Failed to connect to the database");
+//
+//     const data = await db.collection("app").findOne<{ apps: App[] }>({});
+//     invariant(data, "No data found in the database");
+//
+//     return { apps: data.apps };
+// };
 
 export default function AppsRoute() {
     const { apps } = useLoaderData<LoaderData>();
@@ -182,7 +181,6 @@ export function AppsSection({ apps }: { apps: App[] }) {
                     )}
                 </div>
             </div>
-            <Outlet />
         </div>
     );
 }
