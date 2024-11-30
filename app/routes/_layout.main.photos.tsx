@@ -1,7 +1,9 @@
-import { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import invariant from "tiny-invariant";
-import ImageKit from "imagekit";
+import {  ActionFunctionArgs } from "@remix-run/node";
+import { useLoaderData ,useFetcher } from "@remix-run/react";
+import React, { useState, useEffect, useRef } from "react";
+import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { restrictToParentElement } from "@dnd-kit/modifiers";
+import DraggableImage from "~/ui/DraggableImage";
 
 interface Image {
     fileId: string;
@@ -20,34 +22,34 @@ interface LoaderData {
     positions: Record<string, Position>;
 }
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-    invariant(process.env.IMAGEKIT_PUBLIC_KEY, "IMAGEKIT_PUBLIC_KEY is required");
-    invariant(process.env.IMAGEKIT_PRIVATE_KEY, "IMAGEKIT_PRIVATE_KEY is required");
-    invariant(process.env.IMAGEKIT_URL_ENDPOINT, "IMAGEKIT_URL_ENDPOINT is required");
-
-    const imagekit = new ImageKit({
-        publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
-        privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
-        urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
-    });
-
-    const files = await imagekit.listFiles({});
-    const imagePositions: Record<string, Position> = {};
-
-    files.forEach((image, index) => {
-        if (!imagePositions[image.fileId]) {
-            const xPercent = 20 + Math.random() * 20;
-            const yPercent = 30 + Math.random() * 20;
-            imagePositions[image.fileId] = {
-                x: xPercent,
-                y: yPercent,
-                zIndex: index + 1,
-            };
-        }
-    });
-
-    return { images: files, positions: imagePositions };
-};
+// export const loader = async ({ request }: LoaderFunctionArgs) => {
+//     invariant(process.env.IMAGEKIT_PUBLIC_KEY, "IMAGEKIT_PUBLIC_KEY is required");
+//     invariant(process.env.IMAGEKIT_PRIVATE_KEY, "IMAGEKIT_PRIVATE_KEY is required");
+//     invariant(process.env.IMAGEKIT_URL_ENDPOINT, "IMAGEKIT_URL_ENDPOINT is required");
+//
+//     const imagekit = new ImageKit({
+//         publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+//         privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+//         urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+//     });
+//
+//     const files = await imagekit.listFiles({});
+//     const imagePositions: Record<string, Position> = {};
+//
+//     files.forEach((image, index) => {
+//         if (!imagePositions[image.fileId]) {
+//             const xPercent = 20 + Math.random() * 20;
+//             const yPercent = 30 + Math.random() * 20;
+//             imagePositions[image.fileId] = {
+//                 x: xPercent,
+//                 y: yPercent,
+//                 zIndex: index + 1,
+//             };
+//         }
+//     });
+//
+//     return { images: files, positions: imagePositions };
+// };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
@@ -66,12 +68,6 @@ export default function PhotosRoute() {
 }
 
 
-
-import React, { useState, useEffect, useRef } from "react";
-import { useFetcher } from "@remix-run/react";
-import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { restrictToParentElement } from "@dnd-kit/modifiers";
-import DraggableImage from "~/ui/DraggableImage";
 
 interface Image {
     fileId: string;

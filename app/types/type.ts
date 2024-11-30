@@ -1,3 +1,4 @@
+
 export interface Tile {
     x: number;
     y: number;
@@ -18,8 +19,32 @@ export interface TilesData {
 export interface Card {
     id: number;
     icon?: string;
+    slug: string;
+    title: string;
 }
 
+
+
+export interface Feature {
+    [key: string]: string;
+}
+
+export interface App {
+    id: string;
+    title: string;
+    deployment: string;
+    github: string;
+    overview: string;
+    description: string;
+    features?: Feature[];
+    technologiesUsed?: string[];
+    installation?: string;
+    usage?: string;
+}
+
+export interface AppData {
+    apps: App[];
+}
 export interface Image {
     fileId: string;
     name: string;
@@ -30,6 +55,11 @@ export interface Position {
     x: number;
     y: number;
     zIndex: number;
+}
+
+export interface PhotoData {
+    images: Image[];
+    positions: Record<string, Position>;
 }
 
 

@@ -1,12 +1,11 @@
-import type { LoaderFunction } from "@remix-run/node";
+// import type { LoaderFunction } from "@remix-run/node";
 import {
     useSearchParams,
     useLoaderData,
     NavLink,
-    Outlet,
 } from "@remix-run/react";
-import { connectDB } from "~/db/mongoDB.server";
-import invariant from "tiny-invariant";
+// import { connectDB } from "~/db/mongoDB.server";
+// import invariant from "tiny-invariant";
 import Text from "~/ui/Text";
 
 export interface Feature {
@@ -30,15 +29,15 @@ interface LoaderData {
     apps: App[];
 }
 
-export const loader: LoaderFunction = async () => {
-    const { db } = await connectDB();
-    invariant(db, "Failed to connect to the database");
-
-    const data = await db.collection("app").findOne<{ apps: App[] }>({});
-    invariant(data, "No data found in the database");
-
-    return { apps: data.apps };
-};
+// export const loader: LoaderFunction = async () => {
+//     const { db } = await connectDB();
+//     invariant(db, "Failed to connect to the database");
+//
+//     const data = await db.collection("app").findOne<{ apps: App[] }>({});
+//     invariant(data, "No data found in the database");
+//
+//     return { apps: data.apps };
+// };
 
 export default function AppsRoute() {
     const { apps } = useLoaderData<LoaderData>();
@@ -101,7 +100,7 @@ export function AppsSection({ apps }: { apps: App[] }) {
 
                 <div className="relative z-10 p-8 rounded-xl shadow-lg bg-gray-900/60">
                     <div
-                        className="text-center prose-xl md:text-3xl lg:text-5xl text-blue-100 mb-28 mt-24 animated-border p-6 max-w-screen-xl w-full border border-gray-200 rounded-xl shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg"
+                        className="text-center prose-xl md:text-3xl lg:text-5xl text-blue-100 mb-28 mt-24 animated-border p-6 max-w-(--breakpoint-xl) w-full border border-gray-200 rounded-xl shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg"
                         style={{
                             boxShadow:
                                 "0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(0, 0, 255, 0.6)",
@@ -124,12 +123,12 @@ export function AppsSection({ apps }: { apps: App[] }) {
                         </div>
                     </div>
 
-                    <div className="text-center text-xl md:text-3xl lg:text-5xl text-blue-100 mb-16 mt-12 p-4 max-w-screen-lg w-full border border-gray-200 rounded-lg shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="text-center text-xl md:text-3xl lg:text-5xl text-blue-100 mb-16 mt-12 p-4 max-w-(--breakpoint-lg) w-full border border-gray-200 rounded-lg shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>{activeApp.overview}</div>
                         {activeApp.features && activeApp.features.map((feature, index) => {
                             const [title, description] = Object.entries(feature)[0];
                             return (
-                                <div key={index} className="bg-gray-700 p-4 rounded">
+                                <div key={index} className="bg-gray-700 p-4 rounded-sm">
                                     <h4 className="text-lg font-semibold">{title}</h4>
                                     <p className="text-sm">{description}</p>
                                 </div>
@@ -139,7 +138,7 @@ export function AppsSection({ apps }: { apps: App[] }) {
                 </div>
 
                 <div
-                    className="text-center text-xl md:text-3xl lg:text-5xl text-blue-100 mb-16 mt-12 p-4 max-w-screen-lg w-full border border-gray-200 rounded-lg shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg overflow-hidden"
+                    className="text-center text-xl md:text-3xl lg:text-5xl text-blue-100 mb-16 mt-12 p-4 max-w-(--breakpoint-lg) w-full border border-gray-200 rounded-lg shadow-md transition-shadow duration-200 ease-in-out hover:shadow-lg overflow-hidden"
                     style={{
                         boxShadow:
                             "0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(0, 0, 255, 0.4)",
@@ -153,7 +152,7 @@ export function AppsSection({ apps }: { apps: App[] }) {
                                 return (
                                     <div
                                         key={index}
-                                        className="bg-gray-700 p-4 rounded-lg shadow-inner flex-shrink-0 w-64 sm:w-72 md:w-80"
+                                        className="bg-gray-700 p-4 rounded-lg shadow-inner shrink-0 w-64 sm:w-72 md:w-80"
                                     >
                                         <h4 className="text-lg font-semibold break-words">
                                             {title}
@@ -166,7 +165,7 @@ export function AppsSection({ apps }: { apps: App[] }) {
                                 return (
                                     <div
                                         key={`dup-${index}`}
-                                        className="bg-gray-700 p-4 rounded-lg shadow-inner flex-shrink-0 w-64 sm:w-72 md:w-80"
+                                        className="bg-gray-700 p-4 rounded-lg shadow-inner shrink-0 w-64 sm:w-72 md:w-80"
                                     >
                                         <h4 className="text-lg font-semibold break-words">
                                             {title}
@@ -182,7 +181,6 @@ export function AppsSection({ apps }: { apps: App[] }) {
                     )}
                 </div>
             </div>
-            <Outlet />
         </div>
     );
 }
