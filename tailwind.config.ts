@@ -1,9 +1,11 @@
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
+import ratio from "@tailwindcss/aspect-ratio";
 import colors from "tailwindcss/colors";
 
 export default {
     content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx,md,mdx}"],
-    darkMode: "class",
+    darkMode: "selector",
     theme: {
         extend: {
             transitionProperty: {
@@ -167,5 +169,8 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        typography,
+        ratio,
+    ],
 } satisfies Config;
