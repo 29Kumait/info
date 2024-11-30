@@ -107,7 +107,7 @@
 //                     { slides.map ((slidePlaylists , index) => (
 //                         <div
 //                             key={ index }
-//                             className="flex flex-shrink-0 flex-wrap justify-center items-center"
+//                             className="flex shrink-0 flex-wrap justify-center items-center"
 //                             style={ {width: `${ slideWidth }%`} }
 //                         >
 //                             { slidePlaylists.map ((playlist , index) => (

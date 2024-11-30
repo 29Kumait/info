@@ -18,7 +18,7 @@ interface EventCardProps {
 
 function getEventTypeStyle(eventType: string): string {
     const baseStyle =
-        'border border-transparent rounded-2xl p-6 backdrop-blur-sm bg-white/30 shadow-md';
+        'border border-transparent rounded-2xl p-6 backdrop-blur-xs bg-white/30 shadow-md';
     const typeStyles: Record<string, string> = {
         push: `${baseStyle} border-indigo-200`,
         pull_request: `${baseStyle} border-green-200`,
@@ -34,18 +34,18 @@ function getEventTypeStyle(eventType: string): string {
 function getEventTypeIcon(eventType: string) {
     const icons: Record<string, JSX.Element> = {
         push: (
-            <FaCodeBranch className="text-indigo-600 text-3xl mb-2 drop-shadow-sm" />
+            <FaCodeBranch className="text-indigo-600 text-3xl mb-2 drop-shadow-xs" />
         ),
-        issues: <FaBug className="text-yellow-600 text-3xl mb-2 drop-shadow-sm" />,
+        issues: <FaBug className="text-yellow-600 text-3xl mb-2 drop-shadow-xs" />,
         pull_request: (
-            <FaCode className="text-green-600 text-3xl mb-2 drop-shadow-sm" />
+            <FaCode className="text-green-600 text-3xl mb-2 drop-shadow-xs" />
         ),
         issue_comment: (
-            <FaCommentDots className="text-purple-600 text-3xl mb-2 drop-shadow-sm" />
+            <FaCommentDots className="text-purple-600 text-3xl mb-2 drop-shadow-xs" />
         ),
-        fork: <FaCode className="text-pink-600 text-3xl mb-2 drop-shadow-sm" />,
-        star: <FaStar className="text-orange-600 text-3xl mb-2 drop-shadow-sm" />,
-        default: <FaUser className="text-gray-600 text-3xl mb-2 drop-shadow-sm" />,
+        fork: <FaCode className="text-pink-600 text-3xl mb-2 drop-shadow-xs" />,
+        star: <FaStar className="text-orange-600 text-3xl mb-2 drop-shadow-xs" />,
+        default: <FaUser className="text-gray-600 text-3xl mb-2 drop-shadow-xs" />,
     };
     return icons[eventType] || icons.default;
 }

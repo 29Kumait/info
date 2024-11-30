@@ -6,16 +6,6 @@ import colors from "tailwindcss/colors";
 export default {
     content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx,md,mdx}"],
     darkMode: "class",
-    safelist: [
-        'animate-fade-in-up',
-        'animate-fade-out-up',
-        'animate-fade-in-down',
-        'animate-fade-out-down',
-        'animate-fade-in-left',
-        'animate-fade-out-left',
-        'animate-fade-in-right',
-        'animate-fade-out-right',
-    ],
     theme: {
         extend: {
             transitionProperty: {
@@ -179,24 +169,8 @@ export default {
             },
         },
     },
-    variants: {},
     plugins: [
         typography,
         ratio,
-        function ({
-            addUtilities,
-        }: {
-            addUtilities: (utilities: Record<string, any>) => void;
-        }) {
-            addUtilities({
-                ".hidden-scrollbar::-webkit-scrollbar": {
-                    display: "none",
-                },
-                ".hidden-scrollbar": {
-                    "-ms-overflow-style": "none",
-                    "scrollbar-width": "none",
-                },
-            });
-        },
     ],
 } satisfies Config;
