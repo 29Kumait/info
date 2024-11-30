@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/foundation.min.css';
+// import hljs from 'highlight.js';
+// import 'highlight.js/styles/foundation.min.css';
 
 interface CodeProps {
     code: string;
@@ -12,7 +12,7 @@ export function Code({ code, language }: CodeProps) {
 
     useEffect(() => {
         if (codeRef.current) {
-            hljs.highlightElement(codeRef.current);
+            // hljs.highlightElement(codeRef.current);
         }
     }, [code]);
 

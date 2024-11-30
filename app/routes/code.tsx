@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
-import 'prismjs/components/prism-typescript';
+// import Prism from 'prismjs';
+// import 'prismjs/themes/prism-tomorrow.css';
+// import 'prismjs/components/prism-typescript';
 
 import { LinksFunction, LoaderFunction } from '@remix-run/node';
 import {Outlet , useLoaderData} from '@remix-run/react';
@@ -34,7 +34,7 @@ function CodeSnippet() {
                     if (codeRef.current) {
                         const decodedData = decodeURIComponent(event.data);
                         codeRef.current.textContent += decodedData;
-                        Prism.highlightElement(codeRef.current);
+                        // Prism.highlightElement(codeRef.current);
                     }
                 };
 
