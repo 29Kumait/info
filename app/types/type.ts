@@ -16,15 +16,14 @@ export interface TilesData {
     levels: Level[];
 }
 
-// export interface Card {
-//     id: number;
-//     icon?: string;
-// }
-
-export type Card = {
+export interface Card {
+    id: number;
+    icon?: string;
     slug: string;
     title: string;
-};
+}
+
+
 
 export interface Feature {
     [key: string]: string;
