@@ -155,7 +155,7 @@ export { ErrorBoundary };
  return (
  <div className="p-8 mb-24 mt-32 bg-dark-blue-black-01 bg-cover bg-center bg-opacity-90 relative">
  <div className="absolute inset-0 bg-black opacity-10 rounded-xl"></div>
- <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-8 relative z-10 max-w-screen-2xl mx-auto">
+ <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-8 relative z-10 max-w-(--breakpoint-2xl) mx-auto">
  {cards.map((card, index) => (
  <AnimatedCard
  key={card.slug}

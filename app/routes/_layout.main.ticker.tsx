@@ -25,7 +25,7 @@ export default function Ticker({ cards }: { cards: Card[] }) {
             <div className="relative overflow-hidden px-6 m-12">
                 <div className="animate-marquee flex space-x-28 hover:animation-pause">
                     {duplicatedCards.map((card, index) => (
-                        <div key={index} className="p-4 flex-shrink-0 w-[250px]">
+                        <div key={index} className="p-4 shrink-0 w-[250px]">
                             <div>
                                 {card.icon && (
                                     <img
