@@ -334,6 +334,15 @@
   }
 }
 
+
+.animate-marquee {
+    animation: var(--animate-marquee);
+  }
+
+.pause {
+    animation-play-state: paused;
+  }
+
 .animate-fade-in-up {
   animation: fade-in-up 0.5s ease-out forwards;
 }
