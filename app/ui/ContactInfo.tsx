@@ -22,11 +22,9 @@ interface InfoCardProps {
     title: string;
     children: React.ReactNode;
 }
-const InfoCards: FC<InfoCardProps> = ({ title, children }) => (
-    <div className="relative z-10 text-gray-700 rounded-lg shadow-md p-3 m-8 bg-transition-transform transform hover:scale-105 hover:shadow-lg hover:z-10"
-        style={{ boxShadow: "0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(0, 0, 255, 0.4)" }}
+const InfoCards: FC<InfoCardProps> = ({  children }) => (
+    <div className="relative text-gray-700 rounded-lg shadow-md p-3 m-8 bg-transition-transform transform hover:scale-105 hover:shadow-lg hover:z-10"
     >
-        <h3 className="text-lg font-bold mb-4">{title}</h3>
         <div>{children}</div>
     </div>
 );

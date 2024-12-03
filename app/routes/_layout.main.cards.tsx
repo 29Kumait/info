@@ -1,7 +1,7 @@
 import {useLoaderData} from "@remix-run/react";
 import {LoaderFunction} from "@remix-run/node";
-import {FC} from "react";
 import {useInView} from "react-intersection-observer";
+import {useState , useEffect, FC} from "react";
 
 
 import Education from "~/routes/mdx/groupOne/education.mdx";
@@ -147,7 +147,6 @@ export function hiddenScrollbar({
 }
 
 // useHydrated.ts
-import {useState , useEffect} from "react";
 
 function useHydrated() {
     const [hydrated , setHydrated] = useState (false);

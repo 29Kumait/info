@@ -4,7 +4,6 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import ImageKit from "imagekit";
 
-import INFO from "~/ui/ContactInfo";
 import { PhotoSection } from "./_layout.main.photos";
 import { CardsSection } from "./_layout.main.cards";
 import { loader as cardsLoader } from "./_layout.main.cards";
@@ -85,9 +84,9 @@ export default function MainLayout() {
     } = useLoaderData<LoaderData>();
 
     return (
-        <div className="main-layout">
-            <INFO />
+        <div className="main-layout ">
             <PhotoSection images={images} initialPositions={positions} />
+
             <CardsSection cards={cardsData.cards} />
             <AppsSection apps={appsData.apps} />
             <nav
@@ -102,6 +101,7 @@ export default function MainLayout() {
             <Ticker cards={tickerData.cards} />
 
             <Outlet />
+
         </div>
     );
 }

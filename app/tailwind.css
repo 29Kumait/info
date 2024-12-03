@@ -16,6 +16,12 @@
 
 @theme {
   --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+    --spacing-16: 4rem;
+
+
   --font-family-display: "Satoshi", sans-serif;
   --color-neon-pink: oklch(71.7% 0.25 360);
   --color-neon-lime: oklch(91.5% 0.258 129);
@@ -102,8 +108,9 @@
 
   --animate-bounce-in-slow: bounceIn 3s ease-out forwards;
   --animate-fade-out-delayed: fadeOut 2s ease-in-out forwards 4s;
-  --animate-marquee: marquee 10s linear infinite;
+  --animate-marquee: marquee 30s linear infinite;
   --animate-icon-float: float 3s ease-in-out infinite;
+
 
   --inset-shadow-2xs: inset 0 1px oklch(0% 0 0 / 0.05);
   --inset-shadow-xs: inset 0 1px 1px oklch(0% 0 0 / 0.05);
@@ -297,6 +304,10 @@
   animation: fade-in-right 0.5s ease-out forwards;
 }
 
+.animate-marquee {
+  @apply inline-flex whitespace-nowrap;
+}
+
 @utility animate-marquee {
   animation: var(--animate-marquee);
 }
@@ -320,7 +331,7 @@
 
 @utility shadow-glow {
   box-shadow: 0 4px 15px rgba(252, 252, 252, 0.66),
-              0 0 30px rgba(252, 252, 252, 0.49);
+  0 0 30px rgba(252, 252, 252, 0.49);
 }
 
 @utility transition-opacity {
@@ -352,7 +363,6 @@
   background-image: radial-gradient(circle at center, var(--gradient-from), var(--gradient-to));
 }
 
-/* Styles for Hover Effects */
 @variants hover {
   .hover-glow {
     transform: translateY(-10px);
@@ -403,22 +413,26 @@
   }
 }
 
-.button {
-  background-color: var(--color-primary);
-  color: white;
-  padding: var(--spacing-1) var(--spacing-6);
-}
+@layer components {
+  .btn {
+    @apply p-4 bg-gray-100;
 
-.button:hover {
-  background-color: var(--color-secondary);
-}
+    & > .child {
+      @apply text-blue-500;
+    }
 
-.button:hover .child {
-  @apply text-blue-700;
+    &:hover {
+      @apply bg-gray-200;
+
+      & > .child {
+        @apply text-blue-700;
+      }
+    }
+  }
 }
 
 .card {
-  @apply p-6 shadow rounded-lg p-4 border;
+  @apply p-6 shadow rounded-lg border;
   container-type: inline-size;
 
   @container (min-width: 600px) {
@@ -438,8 +452,8 @@
 
 .gradient-bg {
   background: linear-gradient(to right,
-    oklch(62.23% 0.1545 29.234),
-    oklch(62.23% 0.1545 230.765));
+  oklch(62.23% 0.1545 29.234),
+  oklch(62.23% 0.1545 230.765));
 }
 
 .resource-card {
