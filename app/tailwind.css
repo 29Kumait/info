@@ -109,7 +109,6 @@
   --animate-float: float 3s ease-in-out infinite;
   --animate-bounce-in-slow: bounceIn 3s ease-out forwards;
   --animate-fade-out-delayed: fadeOut 2s ease-in-out forwards 4s;
-  --animate-marquee: marquee 10s linear infinite;
 
 
   --inset-shadow-2xs: inset 0 1px rgb(0 0 0 / 0.05);
@@ -121,7 +120,7 @@
   --animate-slide-in-bottom: slideInBottom 1s ease-out forwards;
 
   --animate-fade-out: fadeOut 1s ease-out forwards;
-  /*--animate-marquee: marquee 3s linear infinite;*/
+  --animate-marquee: marquee 3s linear infinite;
 
   --animation-duration: 1s;
   --animate-fade-in-up: fade-in-up var(--animation-duration) ease-out forwards;
