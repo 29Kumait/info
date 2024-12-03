@@ -296,12 +296,9 @@
 @utility animate-fade-in-right {
   animation: fade-in-right 0.5s ease-out forwards;
 }
-
 @utility animate-marquee {
   animation: var(--animate-marquee);
-  display: inline-flex;
-  white-space: nowrap;
-}
+}}
 
 @utility icon-float {
   animation: var(--animate-icon-float);
