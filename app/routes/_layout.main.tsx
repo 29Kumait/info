@@ -17,7 +17,6 @@ import { connectDB } from "~/db/mongoDB.server";
 import Tabs from "~/ui/Tabs";
 import { loader as eventsLoader } from "./_events";
 
-import ScrollFade from "../ui/ScrollFade";
 
 interface LoaderData {
     images: Image[];
@@ -87,22 +86,10 @@ export default function MainLayout() {
 
     return (
         <div className="main-layout">
-
             <INFO />
-
-            <ScrollFade duration={800} direction="left">
             <PhotoSection images={images} initialPositions={positions} />
-            </ScrollFade>
-                <ScrollFade duration={700} direction="up">
-
             <CardsSection cards={cardsData.cards} />
-            </ScrollFade>
-
-            <ScrollFade duration={900} direction="right">
-
             <AppsSection apps={appsData.apps} />
-                </ScrollFade>
-
             <nav
                 className="container mx-auto p-8 flex justify-center bg-transparent rounded-lg overflow-hidden mt-12 z-10 relative"
                 style={{

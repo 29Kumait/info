@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { SocialMediaLinks } from "~/ui/SocialMediaLinks";
-import Contact from "~/routes/mdx/groupTow/contact.mdx";
+// import Contact from "~/routes/mdx/groupTow/contact.mdx";
 
 type InfoCardData = {
     slug: string;
@@ -8,14 +8,14 @@ type InfoCardData = {
 };
 
 const infoCards: InfoCardData[] = [
-    { slug: "contact", title: "CONTACT INFO" },
+    // { slug: "contact", title: "CONTACT INFO" },
     { slug: "media", title: "SOCIAL MEDIA" },
 
 ];
 
 const mdxComponents: Record<string, FC> = {
     media: SocialMediaLinks,
-    contact: Contact,
+    // contact: Contact,
 };
 
 interface InfoCardProps {

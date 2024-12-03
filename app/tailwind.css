@@ -1,16 +1,330 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/aspect-ratio";
 
-@config '../tailwind.config.ts';
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
+  [data-theme="dark"] {
+    --color-bg: #0f172a;
+    --color-text: white;
+  }
+
+  html,
+  body {
+    @apply bg-[var(--color-bg)] text-[var(--color-text)];
+  }
+}
+
+
+
+@theme {
+  --spacing-6: 1.5rem;
+  --font-family-display: "Satoshi", sans-serif;
+  --color-neon-pink: oklch(71.7% 0.25 360);
+  --color-neon-lime: oklch(91.5% 0.258 129);
+  --color-neon-cyan: oklch(91.3% 0.139 195.8);
+  --color-neon-fuchsia: oklch(0.702 0.322 328.363);
+  --color-neon-springgreen: oklch(0.875 0.235 151.024);
+  --color-neon-Indigo: oklch(0.525 0.293 292.297);
+
+  --color-primary: oklch(69% 0.14 264.99);
+  --color-secondary: oklch(18% 0.02 262.98);
+  --color-focus-outline: oklch(75% 0.14 264.99);
+  --color-mirror-effect: oklch(65% 0.01 262.98);
+  --color-card-bg-light: oklch(97% 0.01 262.98);
+  --color-card-bg-dark: oklch(22% 0.01 262.98);
+  --color-control-border-color-selected: oklch(12% 0.01 262.98);
+  --color-menu-bg-color-active: oklch(9% 0.01 262.98);
+  --color-outline-focus-offset: -0.125rem;
+  --color-outline-focus-width: 0.125rem;
+  --color: oklch(88% 0.18 136.99);
+  --color-dark-blue-black-01: oklch(4% 0.02 262.98 / 0.9);
+  --color-dark-blue-black-02: oklch(12% 0.02 262.98 / 0.8);
+  --color-dark-blue-black-03: oklch(7% 0.02 262.98 / 0.7);
+  --color-dark-blue-black-04: oklch(5% 0.02 262.98 / 0.6);
+  --color-dark-blue-black-05: oklch(3% 0.02 262.98 / 0.5);
+  --color-bright-blue-black: oklch(20% 0.02 262.98 / 0.8);
+  --color-bluish-black-01: oklch(5% 0.02 262.98 / 0.9);
+  --color-bluish-black-02: oklch(8% 0.02 262.98 / 0.8);
+  --color-bluish-black-03: oklch(12% 0.02 262.98 / 0.7);
+  --color-custom-gray: oklch(33% 0 0);
+  --color-custom-white: oklch(100% 0 0);
+
+  --font-sans: "Inter", sans-serif;
+  --font-serif: "Merriweather", serif;
+
+  /*--color-primary: oklch(0.1 0.021 270.976 / 0.9);*/
+  /*--color-secondary: oklch(0.1 0.021 270.976 / 0.9);*/
+
+  --spacing: 0.25rem;
+  --transition-property-opacity: opacity;
+
+  --gradient-from: var(--color-primary);
+  --gradient-to: var(--color-secondary);
+
+  --card-bg-gradient: linear-gradient(135deg, #111111, #1c1c1c);
+  --card-border-gradient: linear-gradient(135deg, #6c63ff, #28c6f7);
+  --card-radius: 16px;
+  --card-padding: 2rem;
+  --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  --container-width: 63%;
+  --container-height: 100vh;
+
+  --font-family: "Inter", sans-serif;
+  --heading-color: #ffffff;
+  --text-color: #9aa0a6;
+  --heading-font-size: 2rem;
+  --text-font-size: 1rem;
+
+  --button-border: rgba(255, 255, 255, 0.6);
+  --button-hover-bg: rgba(255, 255, 255, 0.1);
+  --button-text-color: #ffffff;
+  --button-radius: 8px;
+  --button-padding: 0.75rem 1.5rem;
+
+  --code-bg: rgba(0, 0, 0, 0.7);
+  --code-color: #dcdcdc;
+  --code-font-family: "Courier New", monospace;
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+
+  --color-green-800: #3f6212;
+  --color-green-900: #365314;
+  --color-green-950: #1a2e05;
+
+
+  --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+
+  --text-big: 16rem;
+  --text-big--line-height: 18rem;
+  --text-big--font-weight: 550;
+  --text-big--letter-spacing: -0.025em;
+
+  --spacing-1: 0.25rem;
+
+  --transition-duration-300: 300ms;
+  --ease-custom-ease: ease;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-bounce-in-slow: bounceIn 3s ease-out forwards;
+  --animate-fade-out-delayed: fadeOut 2s ease-in-out forwards 4s;
+  --animate-marquee: marquee 10s linear infinite;
+
+
+  --inset-shadow-2xs: inset 0 1px rgb(0 0 0 / 0.05);
+  --inset-shadow-xs: inset 0 1px 1px rgb(0 0 0 / 0.05);
+  --inset-shadow-sm: inset 0 2px 4px rgb(0 0 0 / 0.05);
+
+  --animate-slide-in-left: slideInLeft 1s ease-out forwards;
+  --animate-slide-in-right: slideInRight 1s ease-out forwards;
+  --animate-slide-in-bottom: slideInBottom 1s ease-out forwards;
+
+  --animate-fade-out: fadeOut 1s ease-out forwards;
+  /*--animate-marquee: marquee 3s linear infinite;*/
+
+  --animation-duration: 1s;
+  --animate-fade-in-up: fade-in-up var(--animation-duration) ease-out forwards;
+  --animate-fade-out-up: fade-out-up var(--animation-duration) ease-out forwards;
+  --animate-fade-in-down: fade-in-down var(--animation-duration) ease-out forwards;
+  --animate-fade-out-down: fade-out-down var(--animation-duration) ease-out forwards;
+  --animate-fade-in-left: fade-in-left var(--animation-duration) ease-out forwards;
+  --animate-fade-out-left: fade-out-left var(--animation-duration) ease-out forwards;
+  --animate-fade-in-right: fade-in-right var(--animation-duration) ease-out forwards;
+  --animate-fade-out-right: fade-out-right var(--animation-duration) ease-out forwards;
+
+  --animate-border-glow: borderGlow 5s linear infinite;
+  --animate-border-glow-once: borderGlowOnce 7s linear forwards;
+
+  --animation-iteration-count: 1;
+  --animate-scroll-hint: scrollHint 2s ease-in-out var(--animation-iteration-count);
+
+
+  @keyframes scrollHint {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-13%);
+    }
+  }
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInBottom {
+    0% {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-out-up {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+  }
+
+  @keyframes fade-in-down {
+    0% {
+      opacity: 0;
+      transform: translateY(-1rem);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-out-down {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateY(-1rem);
+    }
+  }
+
+  @keyframes fade-in-left {
+    0% {
+      opacity: 0;
+      transform: translateX(-1rem);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fade-out-left {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateX(-1rem);
+    }
+  }
+
+  @keyframes fade-in-right {
+    0% {
+      opacity: 0;
+      transform: translateX(1rem);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fade-out-right {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateX(1rem);
+    }
+  }
+
+
+  @keyframes scrollHint {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-13%);
+    }
+  }
+
+  @keyframes borderGlowOnce {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+}
+
+
+
+
+@layer base {
+
   *,
   ::after,
   ::before,
@@ -20,94 +334,158 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
 }
 
-body {
-  @apply dark:bg-gray-950 min-h-screen;
+.animate-fade-in-down {
+  animation: fade-in-down 0.5s ease-out forwards;
 }
 
-@media (prefers-color-scheme: dark) {
+.animate-fade-in-left {
+  animation: fade-in-left 0.5s ease-out forwards;
+}
 
-  html,
-  body {
-    color-scheme: dark;
+.animate-fade-in-right {
+  animation: fade-in-right 0.5s ease-out forwards;
+}
+
+@layer utilities {
+  .font-stretch-condensed {
+    font-stretch: condensed;
+  }
+
+  .font-stretch-expanded {
+    font-stretch: expanded;
   }
 }
 
-.transition-opacity {
-  transition-property: opacity;
+
+
+/* Inset Shadows and Rings */
+@layer utilities {
+  .inset-shadow-sm {
+    box-shadow: inset 0 2px 4px rgb(0 0 0 / 0.05);
+  }
+
+  .inset-ring {
+    box-shadow: inset 0 0 0 2px var(--color-gray-200, currentColor);
+  }
 }
 
-.bg-black {
-  background-color: #181818;
+.container {
+  container-type: inline-size;
 }
 
-/* Image Frame Styles */
-/*.img-frame {*/
-/*  @apply border-4 border-b-bright-blue-black shadow-glow rounded-lg overflow-hidden flex items-center justify-center bg-opacity-40;*/
-/*  position: relative;*/
-/*}*/
-
-.img-frame::before {
-  content: '';
-  position: absolute;
-  top: 10%;
-  left: 10%;
-  width: 80%;
-  height: 80%;
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.1), transparent);
-  filter: blur(5px);
-  pointer-events: none;
-  border-radius: 10px;
+@container (min-width: 500px) {
+  .item {
+    flex-direction: row;
+  }
 }
 
-/* Highlight Styles */
-.custom-highlight {
-  background-color: rgba(118, 166, 183, 0.5);
-  color: #e2e8f0;
+
+.component {
+  container-type: inline-size;
+
+  @container (min-width: 600px) {
+    @apply flex-row;
+  }
+
+  @container (max-width: 599px) {
+    @apply flex-col;
+  }
 }
 
-/* Utility Classes */
-.overflow-x-auto {
-  overflow-x: auto;
+
+
+.a-component {
+  @apply p-4 bg-gray-100;
+
+  &>.child {
+    @apply text-blue-500;
+  }
+
+  &:hover {
+    @apply bg-gray-200;
+
+    &>.child {
+      @apply text-blue-700;
+    }
+  }
 }
 
-/*.shadow-glow {*/
-/*  box-shadow: 0 4px 15px rgba(252, 252, 252, 0.66), 0 0 30px rgba(252, 252, 252, 0.49);*/
-/*}*/
+/* .card {
+  background-color: color-mix(in oklab, #ff0000 50%, #0000ff 50%);
+} */
 
-/* Hover Effects */
-.hover-glow {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  @apply transform translate-y-0;
+/* Custom Gradient Utilities */
+@layer utilities {
+  .bg-gradient-45 {
+    background-image: linear-gradient(45deg,
+    var(--gradient-from),
+    var(--gradient-to));
+  }
+
+  .bg-gradient-conic {
+    background-image: conic-gradient(from 0deg,
+    var(--gradient-from),
+    var(--gradient-to));
+  }
+
+  .bg-gradient-radial {
+    background-image: radial-gradient(circle at center,
+    var(--gradient-from),
+    var(--gradient-to));
+  }
 }
 
-.hover-glow:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+.button {
+  background-color: var(--color-primary);
+  color: white;
+  padding: var(--spacing-1) var(--spacing-6);}
+
+.button:hover {
+  background-color: var(--color-secondary);
 }
 
-.hover\:animation-pause:hover {
-  animation-play-state: paused;
+/* components/buttons.css */
+.button {
+  @apply px-4 py-2 bg-blue-500 text-white rounded;
+
+  &:hover {
+    @apply bg-blue-600;
+  }
 }
 
-.hover\:text-bright:hover {
-  color: #b2dcd4d6;
+/* components/cards.css */
+.card {
+  @apply p-6 shadow rounded-lg;
 }
 
-/* Animation Classes */
-.icon-float {
-  animation: float 3s ease-in-out infinite;
+.card {
+  @apply p-4 border;
+
+  container-type: inline-size;
+
+  @container (min-width: 600px) {
+    @apply flex-row;
+  }
+
+  @container (max-width: 599px) {
+    @apply flex-col;
+  }
 }
 
-.animate-marquee {
-  @apply inline-flex whitespace-nowrap;
+.color-card {
+  background-color: lab(75% 20 -30);
+  color: lch(70% 50 320);
+  @apply p-4 rounded;
 }
 
-.drop-bounce {
-  @apply animate-[bounce_0.3s_ease-in-out];
+.gradient-bg {
+  background: linear-gradient(to right,
+  oklch(62.23% 0.1545 29.234),
+  oklch(62.23% 0.1545 230.765));
 }
 
 /* Resource Card Styles */
@@ -140,10 +518,8 @@ body {
 
 .resource-card:focus-within {
   outline: 2px solid #262c36;
-  /* Corrected var syntax */
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(0, 119, 250, 0.59);
-  /* Corrected var syntax */
 }
 
 /* Animated Border Styles */
@@ -153,7 +529,7 @@ body {
 }
 
 .animated-border::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -3px;
   left: -3px;
@@ -170,88 +546,94 @@ body {
 }
 
 .animated-border:hover::before {
-  animation: borderGlowOnce 7s linear forwards;
+  animation: borderGlowOnce 1s ease-in-out forwards;
 }
 
-/* Keyframes */
-
-/* Float Animation */
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
+/* Scrollbar Styles */
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-/* Bounce Animation */
-@keyframes bounce {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* Glow Border Animation */
-@keyframes glow-border {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  100% {
-    background-position: 200% 50%;
-  }
-}
-
-@keyframes borderGlowOnce {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  100% {
-    background-position: 200% 50%;
-  }
+.hidden-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Fade In Animation */
 .fade-in {
-  animation: fadeIn 0.5s ease-in-out forwards;
+  animation: fadeIn 1s ease-in-out forwards;
 }
 
-/* Keyframes for fadeIn */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+.shadow-glow {
+  box-shadow: 0 4px 15px rgba(252, 252, 252, 0.66),
+  0 0 30px rgba(252, 252, 252, 0.49);
 }
 
-/* Scroll Hint Animation */
-@keyframes scrollHint {
+.fade-in-up {
+  animation: fade-in-up var(--animation-duration) ease-out forwards;
+}
 
-  0%,
-  100% {
-    transform: translateY(0);
-  }
+.fade-out-up {
+  animation: fade-out-up var(--animation-duration) ease-out forwards;
+}
 
-  50% {
-    transform: translateY(-13%);
-  }
+.fade-in-down {
+  animation: fade-in-down var(--animation-duration) ease-out forwards;
+}
+
+.fade-out-down {
+  animation: fade-out-down var(--animation-duration) ease-out forwards;
+}
+
+.fade-in-left {
+  animation: fade-in-left var(--animation-duration) ease-out forwards;
+}
+
+.fade-out-left {
+  animation: fade-out-left var(--animation-duration) ease-out forwards;
+}
+
+.fade-in-right {
+  animation: fade-in-right var(--animation-duration) ease-out forwards;
+}
+
+.fade-out-right {
+  animation: fade-out-right var(--animation-duration) ease-out forwards;
+}
+
+.transition-opacity {
+  transition-property: opacity;
+}
+
+.transition-custom-ease {
+  transition-timing-function: ease;
+}
+
+.transition-duration-300 {
+  transition-duration: 300ms;
 }
 
 .scroll-hint {
-  animation: scrollHint 2s ease-in-out;
-  animation-iteration-count: 1;
+  animation: var(--animate-scroll-hint);
+}
+
+.sidebar {
+  container-type: inline-size;
+
+  @container (min-width: 200px) {
+    @apply block;
+  }
+
+  @container (max-width: 199px) {
+    @apply hidden;
+  }
+}
+
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+.transition-opacity {
+  transition-property: var(--transition-property-opacity);
 }
