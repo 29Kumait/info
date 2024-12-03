@@ -18,29 +18,28 @@ import { Card } from "~/types/type";
 
 
 export default function Ticker({ cards }: { cards: Card[] }) {
+  const duplicatedCards = [...cards, ...cards];
 
-    const duplicatedCards = [...cards, ...cards];
-
-    return (
-        <div className="bg-slate-950 w-full rounded-lg overflow-hidden mt-12 z-10 relative justify-center">
-            <div className="relative overflow-hidden px-6 m-12">
-                <div className="animate-marquee flex space-x-28 hover:animation-pause">
-                    {duplicatedCards.map((card, index) => (
-                        <div key={index} className="p-4 shrink-0 w-[250px]">
-                            <div>
-                                {card.icon && (
-                                    <img
-                                        src={card.icon}
-                                        alt={`Icon for card ${card.id}`}
-                                        className="w-16 h-16 mb-6 mx-auto icon-float"
-                                        loading="lazy"
-                                    />
-                                )}
-                            </div>
-                        </div>
-                    ))}
-                </div>
+  return (
+    <div className="bg-slate-950 w-full rounded-lg overflow-hidden mt-12 z-10 relative justify-center">
+      <div className="relative overflow-hidden px-6 m-12">
+        <div className="animate-marquee space-x-28 hover:animation-pause">
+          {duplicatedCards.map((card, index) => (
+            <div key={index} className="p-4 shrink-0 w-[250px]">
+              <div>
+                {card.icon && (
+                  <img
+                    src={card.icon}
+                    alt={`Icon for card ${card.id}`}
+                    className="w-16 h-16 mb-6 mx-auto icon-float"
+                    loading="lazy"
+                  />
+                )}
+              </div>
             </div>
+          ))}
         </div>
-    );
+      </div>
+    </div>
+  );
 }
