@@ -5,6 +5,7 @@ import {
     Scripts,
     ScrollRestoration,
     useRouteLoaderData,
+    useNavigate,
 } from "@remix-run/react";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 
@@ -32,7 +33,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export function Layout({ children }: { children: React.ReactNode }) {
 
     const { theme } = useRouteLoaderData("root") as { theme: string };
-
     return (
         <html lang="en" data-theme={ theme } >
         <head>
@@ -45,6 +45,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <body >
         <header>
             <ThemeToggle/>
+            <BackwardButton/>
         </header>
         { children }
         <ScrollRestoration/>
@@ -59,3 +60,19 @@ export default function App() {
 }
 
 export { ErrorBoundary }
+
+
+
+function BackwardButton() {
+    const navigate = useNavigate();
+    return (
+        <button
+            onClick={() => {
+                navigate(-1);
+            }}
+            className="z-30 fixed top-12 right-0 p-2 bg-gray-800 text-white rounded-lg  flex items-center px-4 py-2 text-sm font-medium transition"
+        >
+            back
+        </button>
+    );
+}

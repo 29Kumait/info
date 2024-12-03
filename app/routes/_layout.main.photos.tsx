@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 import DraggableImage from "~/ui/DraggableImage";
-
+import INFO from "~/ui/ContactInfo";
 interface Image {
     fileId: string;
     name: string;
@@ -132,6 +132,7 @@ export const PhotoSection: React.FC<PhotoSectionProps> = ({ images, initialPosit
 
     return (
         <div className="relative w-full rounded-lg z-10 bg-cover">
+            <INFO />
             {hydrated ? (
                 <DndContext sensors={sensors} onDragEnd={handleDragEnd} modifiers={[restrictToParentElement]}>
                     <div
@@ -168,6 +169,7 @@ export const PhotoSection: React.FC<PhotoSectionProps> = ({ images, initialPosit
                     }}
                 ></div>
             )}
+
         </div>
     );
 };
