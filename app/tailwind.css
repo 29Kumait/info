@@ -15,12 +15,8 @@
 }
 
 @theme {
+  
   --spacing-6: 1.5rem;
-    --spacing-8: 2rem;
-    --spacing-10: 2.5rem;
-    --spacing-12: 3rem;
-    --spacing-16: 4rem;
-
 
   --font-family-display: "Satoshi", sans-serif;
   --color-neon-pink: oklch(71.7% 0.25 360);
@@ -528,14 +524,3 @@
   animation: var(--animate-scroll-hint);
 }
 
-.sidebar {
-  container-type: inline-size;
-
-  @container (min-width: 200px) {
-    @apply block;
-  }
-
-  @container (max-width: 199px) {
-    @apply hidden;
-  }
-}
