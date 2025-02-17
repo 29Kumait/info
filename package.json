@@ -43,7 +43,7 @@
     "@typescript-eslint/parser": "^8.16.0",
     "date-fns": "^4.1.0",
     "eslint": "^9.16.0",
-    "eslint-import-resolver-typescript": "^3.6.3",
+    "eslint-import-resolver-typescript": "^3.8.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.2",
