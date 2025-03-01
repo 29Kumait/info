@@ -15,7 +15,7 @@
     "@dnd-kit/modifiers": "^8.0.0",
     "@remix-run/node": "^2.15.0",
     "@remix-run/react": "^2.15.3",
-    "@remix-run/serve": "^2.15.0",
+    "@remix-run/serve": "^2.15.3",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/vite": "^4.0.0",
     "cookie": "^1.0.2",
