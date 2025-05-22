@@ -23,7 +23,6 @@ export default function ThemeToggle() {
             { theme: theTheme },
             { method: "POST", action: "/theme-toggle" }
         );
-        document.documentElement.setAttribute("data-theme", theTheme);
     };
 
     const isSubmitting = fetcher.state === "submitting";
